@@ -2,19 +2,20 @@
 
 import { signIn } from "next-auth/react";
 import Image from "next/image";
+import styles from "./Login.module.css";
 
 function Login() {
   return (
-    <div>
-      <div>
-        <Image
-          alt="no image"
-          src="/../public/fitbook.png"
-          width={400}
-          height={400}
-        />
-        <button onClick={() => signIn("google")}>Sign in here!</button>
-      </div>
+    <div className={styles.container}>
+      <Image
+        alt="no image"
+        src="/../public/fitbook.png"
+        width={300}
+        height={300}
+      />
+      <button className={styles.signIn} onClick={() => signIn("google")}>
+        Sign in here!
+      </button>
     </div>
   );
 }
