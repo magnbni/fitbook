@@ -1,0 +1,28 @@
+.container {
+    background-color: var(--color-primary);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.signIn {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    border: none;
+    font-size: 3rem;
+    font-weight: bolder;
+    padding: 2rem 6rem;
+    border-radius: 0.5rem;
+    transition: scale 0.5s;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.signIn:hover {
+    cursor: pointer;
+    scale: 1.05;
+}
+
+.logo {
+}
