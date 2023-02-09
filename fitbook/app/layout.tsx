@@ -1,10 +1,12 @@
-import { SessionProvider } from "../components/SessionProvider";
-
-import { getServerSession } from "next-auth";
 import "../styles/globals.css";
-import Header from "./Header";
+
+import { SessionProvider } from "../components/SessionProvider";
+import { getServerSession } from "next-auth";
+
 import { authOptions } from "../pages/api/auth/[...nextauth]";
-import Login from "../components/Login";
+
+import Header from "../components/Header/Header";
+import Login from "../components/Login/Login";
 
 export default async function RootLayout({
   children,
@@ -19,7 +21,9 @@ export default async function RootLayout({
       <body>
         <SessionProvider session={session}>
           {!session ? (
-            <Login />
+            <div>
+              <Login />
+            </div>
           ) : (
             <div>
               <Header />
