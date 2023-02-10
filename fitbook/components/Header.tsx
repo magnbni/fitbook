@@ -5,7 +5,7 @@ import Logout from "./Logout";
 
 function Header() {
   return (
-    <header className="h-14 flex justify-between items-center p-4 bg-primary">
+    <header className="shadow-xl h-14 w-full flex justify-between items-center p-4 bg-primary fixed top-0">
       <Link className="items-center" href={"/"}>
         <p className="drop-shadow-md text-white text-2xl font-black tracking-wider">
           fitbook
