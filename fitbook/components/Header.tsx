@@ -2,23 +2,26 @@
 
 import Link from "next/link";
 import Logout from "./Logout";
-import Image from "next/image";
 
 function Header() {
   return (
-    <header className="flex justify-between items-center p-4 bg-primary">
+    <header className="h-14 flex justify-between items-center p-4 bg-primary">
       <Link className="items-center" href={"/"}>
-        <p className="drop-shadow-md text-white text-4xl font-black tracking-wider">
+        <p className="drop-shadow-md text-white text-2xl font-black tracking-wider">
           fitbook
         </p>
       </Link>
       <div className="flex justify-between items-center">
-        <Link href={"/"}>
+        <Link
+          href={"/myprofile"}
+          className="hover:scale-105 flex bg-white shadow-md items-center p-1 px-1 pr-2 h-10 rounded"
+        >
           <img
-            className="w-10 h-10 rounded-full shadow-md"
+            className="w-8 h-8 rounded shadow-inner"
             src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
             alt="Rounded avatar"
-          />
+          />{" "}
+          <p className="text-primary font-black pl-2">Fred Ole</p>
         </Link>
         <Logout />
       </div>

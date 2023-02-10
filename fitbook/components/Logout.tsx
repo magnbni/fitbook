@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 function Logout() {
   return (
     <button
-      className=" drop-shadow-md h-10 p-1 pl-2 pr-2 ml-4 bg-white rounded-sm text-primary font-black shadow-md"
+      className="hover:scale-105 h-10 p-1 px-4 ml-4 bg-white rounded text-primary font-black shadow-md"
       onClick={() => signOut()}
     >
       {" "}
