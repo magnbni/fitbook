@@ -3,9 +3,9 @@
 function Feed() {
   return (
     <>
-      <div className="fixed top-14 inset-x-1/4 w-6/12 h-screen shadow-xl"></div>
-      <div className=" w-full min-h-screen flex justify-center flex-col px-4">
-        <div className=" border-2 p-4 rounded my-2">
+      <div className="fixed w-6/12 h-screen shadow-xl top-14 inset-x-1/4"></div>
+      <div className="flex flex-col justify-center w-full min-h-screen px-4 ">
+        <div className="p-4 my-2 border-2 rounded ">
           <h4>
             <b>Twitt</b>
           </h4>
@@ -14,7 +14,7 @@ function Feed() {
           sequi voluptatibus, eveniet, a corporis ab dolores cupiditate natus
           perspiciatis rerum est.
         </div>
-        <div className=" border-2 p-4 rounded my-2">
+        <div className="p-4 my-2 border-2 rounded ">
           <h4>
             <b>Twitt</b>
           </h4>
@@ -29,7 +29,7 @@ function Feed() {
           repellat illo nostrum saepe, alias, harum error quidem sint provident
           nemo officia inventore laborum?
         </div>
-        <div className=" border-2 p-4 rounded my-2">
+        <div className="p-4 my-2 border-2 rounded ">
           <h4>
             <b>Twitt</b>
           </h4>
@@ -38,7 +38,7 @@ function Feed() {
           sequi voluptatibus, eveniet, a corporis ab dolores cupiditate natus
           perspiciatis rerum est.
         </div>
-        <div className=" border-2 p-4 rounded my-2">
+        <div className="p-4 my-2 border-2 rounded ">
           <h4>
             <b>Twitt</b>
           </h4>
@@ -47,7 +47,7 @@ function Feed() {
           sequi voluptatibus, eveniet, a corporis ab dolores cupiditate natus
           perspiciatis rerum est.
         </div>
-        <div className=" border-2 p-4 rounded my-2">
+        <div className="p-4 my-2 border-2 rounded ">
           <h4>
             <b>Twitt</b>
           </h4>
@@ -56,7 +56,7 @@ function Feed() {
           sequi voluptatibus, eveniet, a corporis ab dolores cupiditate natus
           perspiciatis rerum est.
         </div>
-        <div className=" border-2 p-4 rounded my-2">
+        <div className="p-4 my-2 border-2 rounded ">
           <h4>
             <b>Twitt</b>
           </h4>
@@ -65,7 +65,7 @@ function Feed() {
           sequi voluptatibus, eveniet, a corporis ab dolores cupiditate natus
           perspiciatis rerum est.
         </div>
-        <div className=" border-2 p-4 rounded my-2">
+        <div className="p-4 my-2 border-2 rounded ">
           <h4>
             <b>Twitt</b>
           </h4>
@@ -74,7 +74,7 @@ function Feed() {
           sequi voluptatibus, eveniet, a corporis ab dolores cupiditate natus
           perspiciatis rerum est.
         </div>
-        <div className=" border-2 p-4 rounded my-2">
+        <div className="p-4 my-2 border-2 rounded ">
           <h4>
             <b>Twitt</b>
           </h4>

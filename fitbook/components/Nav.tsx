@@ -47,7 +47,7 @@ function Nav() {
     <div className="flex flex-col items-center w-full ">
       {links.map((link, index) => (
         <Link
-          className="flex items-center w-6/12 p-1 my-2 transition-colors duration-500 ease-in-out bg-white text-black; hover:text-white hover:bg-primary"
+          className="flex items-center w-full p-1 my-2 transition-colors duration-500 ease-in-out bg-white text-black; hover:text-white hover:bg-primary"
           key={index}
           href={link.path}
         >

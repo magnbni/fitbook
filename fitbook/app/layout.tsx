@@ -7,6 +7,7 @@ import { authOptions } from "../pages/api/auth/[...nextauth]";
 
 import Header from "../components/Header";
 import Login from "../components/Login";
+import Nav from "../components/Nav";
 
 export default async function RootLayout({
   children,
@@ -27,7 +28,15 @@ export default async function RootLayout({
           ) : (
             <div>
               <Header />
-              <div className="pt-6">{children}</div>
+              <div className="flex justify-center p-6 mt-14 ">
+                <div className="fixed left-0 flex justify-center w-3/12">
+                  <Nav />
+                </div>
+                <div className="flex justify-center w-6/12">{children}</div>
+                <div className="fixed right-0 flex justify-center w-3/12 ">
+                  right panel
+                </div>
+              </div>
             </div>
           )}
         </SessionProvider>
