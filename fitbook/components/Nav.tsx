@@ -13,7 +13,7 @@ function Nav() {
   const links = [
     {
       name: "My profile",
-      path: "/myprofile",
+      path: "/profile",
       icon: <UserCircleIcon className={iconSize} />,
     },
     {
