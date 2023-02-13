@@ -13,7 +13,7 @@ function Header() {
       </Link>
       <div className="flex justify-between items-center">
         <Link
-          href={"/myprofile"}
+          href={"/profile"}
           className="hover:scale-105 flex bg-white shadow-md items-center p-1 px-1 pr-2 h-10 rounded"
         >
           <img
