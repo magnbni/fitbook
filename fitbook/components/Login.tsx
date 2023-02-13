@@ -14,7 +14,7 @@ function Login() {
       >
         <p className="font-bold text-primary pr-5">Sign in with google here!</p>
         <Image
-          src={"/../public/google.png"}
+          src={"/google.png"}
           alt={"google"}
           width={40}
           height={40}
