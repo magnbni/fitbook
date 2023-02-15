@@ -3,7 +3,6 @@
 function Feed() {
   return (
     <>
-      <div className="fixed w-6/12 h-screen shadow-xl top-14 inset-x-1/4"></div>
       <div className="flex flex-col justify-center w-full min-h-screen px-4 ">
         <div className="p-4 my-2 border-2 rounded ">
           <h4>
