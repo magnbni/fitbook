@@ -25,7 +25,7 @@ function Login() {
       }></input>
       <label>Passord</label><input className="text-black" value={word} type="text"  id="passwordID" placeholder="Password" onChange={(e) => setWord(e.target.value)}></input>
       <button type="submit"
-        onClick={() => register()}
+        onClick={() => register().then(() => signIn("google"))}
         >Regsitrer</button>
       <button
         className="flex items-center justify-between p-2 px-4 m-10 bg-white border-2" data-onsuccess="onSignIn"
