@@ -5,6 +5,7 @@ import Image from "next/image";
 import { db, firebase } from "../firebase";
 import { collection, doc, setDoc, addDoc, getDoc } from "firebase/firestore";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 
 function Login() {
@@ -19,25 +20,22 @@ function Login() {
     <>
     <div className="flex flex-col items-center justify-center w-screen h-screen text-white align-middle bg-primary">
       <p className="text-4xl ">Welcome to</p>
-      <p className="text-8xl ">fitbook</p>
-      <label>Brukernavn</label><input value={name} type="text" className="text-black" placeholder="Username" id="usernameID" onChange={
+      <p className="text-9xl mb-10">fitbook</p>
+      <input value={name} type="text" className="text-black mt-6" placeholder="Username" id="usernameID" onChange={
         (e) => setName(e.target.value)
       }></input>
-      <label>Passord</label><input className="text-black" value={word} type="text"  id="passwordID" placeholder="Password" onChange={(e) => setWord(e.target.value)}></input>
-      <button type="submit"
-        onClick={() => register().then(() => signIn("google"))}
-        >Regsitrer</button>
+      <input className="text-black mb-3 mt-1" value={word} type="text"  id="passwordID" placeholder="Password" onChange={(e) => setWord(e.target.value)}></input>
       <button
-        className="flex items-center justify-between p-2 px-4 m-10 bg-white border-2" data-onsuccess="onSignIn"
-        onClick={() => signIn("google")}
+        className="flex items-center justify-between px-4 m-1 bg-white border-2" data-onsuccess="onSignIn"
+        onClick={() => signIn2()}
       >
-        <p id="test" className="pr-5 font-bold text-primary">Sign in with google here!</p>
-        <Image
-          src={"/google.png"}
-          alt={"google"}
-          width={40}
-          height={40}
-        ></Image>
+        <p className="pr-5 font-bold text-primary">Sign in here!</p>
+      </button>
+      <button
+        className="flex items-center justify-between px-4 m-1 bg-white border-2" data-onsuccess="onSignIn"
+        onClick={() => signUp()}
+      >
+        <p className="pr-5 font-bold text-primary">Sign up here!</p>
       </button>
     </div>
     </>
@@ -76,5 +74,100 @@ async function onSignIn(googleUser: { getBasicProfile: () => any; }) {
   
   await setDoc(doc(db, "user", "1"), docData);
 }
+
+const signUp222 = async () => {
+  let username = (document.getElementById("usernameID") as HTMLInputElement).value;
+  let password = (document.getElementById("passwordID") as HTMLInputElement).value;
+  
+  const docData = {
+    username: username,
+    password: password
+    };
+    
+
+    const findUsers = async() =>{
+      const docRef = doc(db, "users", username);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()){
+        alert("User already exists.")
+      } else {
+        await setDoc(doc(db, "users", username), docData);
+        signIn("google")
+     }
+
+      findUsers();
+    
+}
+}
+
+const signIn2 = async () => {
+  let username = (document.getElementById("usernameID") as HTMLInputElement).value;
+  let password = (document.getElementById("passwordID") as HTMLInputElement).value;
+  
+  const docData = {
+    username: username,
+    password: password
+    };
+
+    const findUsers = async() =>{
+      const docRef = doc(db, "users", username);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()){
+        let passwordInDatabase = docSnap.get("password");
+        console.log(passwordInDatabase);
+        if (passwordInDatabase == password) {
+          signIn("google")
+        } else {
+          alert(`Wrong password`);
+        }
+      } else {
+        alert(`No such user`);
+     }
+    
+      // if (docSnap.exists()) {
+      //   let passwordInDatabase = docSnap.get("password")
+      //   if (passwordInDatabase = password) {
+      //     toast("You've signed in");
+      //   }
+
+      // } else {
+      //   toast("No such user! Try to sign up instead");
+      }
+      findUsers();
+    }
+
+    const signUp = async () => {
+      let username = (document.getElementById("usernameID") as HTMLInputElement).value;
+      let password = (document.getElementById("passwordID") as HTMLInputElement).value;
+      
+      const docData = {
+        username: username,
+        password: password
+        };
+    
+        const findUsers = async() =>{
+          const docRef = doc(db, "users", username);
+          const docSnap = await getDoc(docRef);
+    
+          if (docSnap.exists()){
+              alert(`User exists`);
+          } else {
+            await setDoc(doc(db, "users", username), docData);
+            signIn("google")
+         }
+        
+          // if (docSnap.exists()) {
+          //   let passwordInDatabase = docSnap.get("password")
+          //   if (passwordInDatabase = password) {
+          //     toast("You've signed in");
+          //   }
+    
+          // } else {
+          //   toast("No such user! Try to sign up instead");
+          }
+          findUsers();
+        }
 
 export default Login;
