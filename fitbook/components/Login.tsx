@@ -80,8 +80,8 @@ const signIn2 = async () => {
     } else {
       alert(`No such user`);
     }
-    findUsers();
   };
+  findUsers();
 };
 
 const signUp = async () => {
