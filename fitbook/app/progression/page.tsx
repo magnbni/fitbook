@@ -1,5 +1,5 @@
 "use client"
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -34,7 +34,20 @@ let options = {
   },
 };
 
-let labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+// scewing of time scope to match current month
+let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const today = new Date();
+let currentMonth = today.getMonth() - 5;
+let labels: string[] = [];
+let dataIndexes: number[] = [];
+for (let i=0; i<6; i++) {
+  if (currentMonth < 0) currentMonth += 12;
+  if (currentMonth > 11) currentMonth -= 12;
+  labels.push(months[currentMonth]);
+  dataIndexes.push(currentMonth);
+  currentMonth++;
+}
+
 
 const handleRegisterWorkout = () => {
   console.log("Open component")
@@ -44,8 +57,8 @@ let weightData = {
   labels,
   datasets: [
     {
-      label: 'Weight (in kg)',
-      data: [85, 85, 84, 83, 82, 81],
+      label: 'Bodyweight (in kg)',
+      data: [85, 85, 84, 85, 84, 82],
       borderColor: '#40A798',
       backgroundColor: 'rgba(255, 99, 132, 0.5)'
     },
@@ -57,7 +70,31 @@ let run100Data = {
   datasets: [
     {
       label: '100m Time (in seconds)',
-      data: [20.4, 19.5, 19.1, 18.9, 18.4, 18.3, 18.1],
+      data: [20.4, 19.5, 19.1, 19.1, 18.6, 18.3],
+      borderColor: '#40A798',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+  ],
+};
+
+let maxBenchData = {
+  labels,
+  datasets: [
+    {
+      label: 'Max benchpress (in kg)',
+      data: [85, 87.5, 80, 82.5, 87.5, 100],
+      borderColor: '#40A798',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+  ],
+};
+
+let caloriesBurntData = {
+  labels,
+  datasets: [
+    {
+      label: 'Calories burnt (in kcal)',
+      data: [2133, 2349, 2132, 850, 2678, 2067],
       borderColor: '#40A798',
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
     },
@@ -79,9 +116,17 @@ const Progression: NextPage = () => {
   };
 
   const handle100m = () => {
-    // filter for 100m time and close drop-down
-    options
     data = run100Data;
+    setOpen1(false);
+  }
+
+  const handleMaxBench = () => {
+    data = maxBenchData;
+    setOpen1(false);
+  }
+
+  const handleCaloriesBurnt = () => {
+    data = caloriesBurntData;
     setOpen1(false);
   }
   return (
@@ -96,14 +141,20 @@ const Progression: NextPage = () => {
         </div>
         {/* Datafilter */}
         <div className="flex flex-col top-0.5 items-center width-1/2 bg-white text-primary p-1 rounded-md border-black">
-          <button className="font-bold rounded-md w-full h-full hover:bg-gray-100" onClick={handleOpen1}>Datatype</button>
+          <button className="font-bold rounded-md w-full h-full hover:bg-gray-100" onClick={handleOpen1}>Filter</button>
           {open1 ? (
             <ul className="w-full h-full">
               <li className="rounded-md w-full h-full hover:bg-gray-100">
-                <button className="w-full h-full" onClick={handleWeight}>Weight</button>
+                <button className="w-full h-full" onClick={handleWeight}>Bodyweight</button>
               </li>
               <li className="rounded-md w-full h-full hover:bg-gray-100">
                 <button className="w-full h-full" onClick={handle100m}>100m time</button>
+              </li>
+              <li className="rounded-md w-full h-full hover:bg-gray-100">
+                <button className="w-full h-full" onClick={handleMaxBench}>Max benchpress</button>
+              </li>
+              <li className="rounded-md w-full h-full hover:bg-gray-100">
+                <button className="w-full h-full" onClick={handleCaloriesBurnt}>Calories burnt</button>
               </li>
             </ul>
           ) : null}
