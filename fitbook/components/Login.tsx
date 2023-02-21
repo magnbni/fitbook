@@ -16,7 +16,7 @@ function Login() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-screen h-screen text-white align-middle bg-primary">
+      <div className="flex flex-col items-center text-center justify-center w-screen h-screen text-white align-middle bg-primary">
         <p className="text-4xl ">Welcome to</p>
         <p className="text-9xl mb-10">fitbook</p>
         <input
@@ -36,18 +36,22 @@ function Login() {
           onChange={(e) => setWord(e.target.value)}
         ></input>
         <button
-          className="flex items-center justify-between px-4 m-1 bg-white border-2"
+          className="flex items-center justify-between w-80 px-4 m-1 bg-white border-2 text-center content-center"
           data-onsuccess="onSignIn"
           onClick={() => signIn2()}
         >
-          <p className="pr-5 font-bold text-primary">Sign in here!</p>
+          <p className="pr-5 font-bold text-center w-full text-primary">
+            Sign in here
+          </p>
         </button>
         <button
-          className="flex items-center justify-between px-4 m-1 bg-white border-2"
+          className="flex items-center justify-between px-4 m-1 bg-white border-2 w-80 text-center"
           data-onsuccess="onSignIn"
           onClick={() => signUp()}
         >
-          <p className="pr-5 font-bold text-primary">Sign up here!</p>
+          <p className="pr-5 font-bold text-primary w-full text-center lm-5">
+            Sign up here
+          </p>
         </button>
       </div>
     </>
@@ -60,9 +64,8 @@ const signIn2 = async () => {
   let password = (document.getElementById("passwordID") as HTMLInputElement)
     .value;
 
-  const docData = {
+  const docData2 = {
     username: username,
-    password: password,
   };
 
   const findUsers = async () => {
@@ -73,6 +76,7 @@ const signIn2 = async () => {
       let passwordInDatabase = docSnap.get("password");
       console.log(passwordInDatabase);
       if (passwordInDatabase == password) {
+        await setDoc(doc(db, "activeUsers", "1"), docData2);
         signIn("google");
       } else {
         alert(`Wrong password`);
@@ -93,6 +97,10 @@ const signUp = async () => {
   const docData = {
     username: username,
     password: password,
+    picture: "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png"
+  };
+  const docData2 = {
+    username: username,
   };
 
   const findUsers = async () => {
@@ -103,6 +111,7 @@ const signUp = async () => {
       alert(`User exists`);
     } else {
       await setDoc(doc(db, "users", username), docData);
+      await setDoc(doc(db, "activeUsers", "1"), docData2);
       signIn("google");
     }
   };
