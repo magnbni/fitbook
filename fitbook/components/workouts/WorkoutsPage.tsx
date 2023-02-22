@@ -1,71 +1,108 @@
 import { useState } from "react";
+import ActiveWorkout from "./ActiveWorkout";
 
-import Workout from "./Workout";
-import WorkoutChange from "./WorkoutChange";
+import Display from "./Display";
 
-function Workouts() {
-  const [open, setOpen] = useState(false);
-  const [index, setIndex] = useState(0);
-  const workouts = [
-    { name: "Getting big" },
-    { name: "Getting slim" },
-    { name: "Getting fast" },
-    { name: "Getting bold" },
-    { name: "Getting stuck" },
-    { name: "Getting thick" },
-  ];
+type Workout = {
+  name: String;
+  img: string;
+};
 
-  const clip = "clip";
+type Session = {
+  name: String;
+  img: string;
+};
+
+type Props = {
+  open: number;
+  workoutsData: Array<Workout>;
+  sessionsData: Array<Session>;
+  setOpen: (value: number) => void;
+  setIndex: (value: number) => void;
+};
+
+function WorkoutsPage({
+  sessionsData,
+  workoutsData,
+  setIndex,
+  setOpen,
+  open,
+}: Props) {
+  function handleCreateNew() {
+    if (tab == workoutsData) {
+      setOpen(1);
+    } else if (tab == sessionsData) {
+      setOpen(2);
+    }
+  }
+
+  function Open() {
+    if (tab == workoutsData) {
+      setOpen(1);
+    } else if (tab == sessionsData) {
+      setOpen(2);
+    }
+  }
+  const [tab, setTab] = useState(workoutsData);
+
   return (
-    <>
-      {open ? (
-        <WorkoutChange
-          open={open}
-          setOpen={setOpen}
-          name={workouts[index].name}
-          index={index}
-        />
-      ) : (
-        <div className="flex flex-col w-full h-full">
-          <p className="p-4 text-2xl">My Workout Page</p>
-          <div className="flex justify-between">
-            <button className="w-6/12 py-2 m-2 border-2">Create Session</button>
-            <button className="w-6/12 py-2 m-2 border-2">Create Session</button>
-          </div>
+    <div className="mb-4">
+      <div className="mb-4">
+        <ActiveWorkout />
+      </div>
 
-          <div>
-            <p>Workouts</p>
-            <div className="grid w-full grid-cols-2 p-2 border-2">
-              {workouts.map((workout, index) => (
-                <Workout
-                  setOpen={setOpen}
-                  setIndex={setIndex}
-                  key={index}
-                  name={workout.name}
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
+      <div className="flex flex-col w-full rounded shadow-lg">
+        <div className="flex w-full rounded shadow-md">
+          <button
+            className={`w-1/2 p-2 text-center rounded-tl ${
+              tab == workoutsData
+                ? "bg-primary text-white"
+                : " border-primary border-2 text-primary"
+            } `}
+            onClick={() => setTab(workoutsData)}
+          >
+            Workouts
+          </button>
+          <button
+            className={`w-1/2 p-2 text-center rounded-tr ${
+              tab == sessionsData
+                ? "bg-primary text-white"
+                : "border-primary border-2 text-primary"
+            } `}
+            onClick={() => setTab(sessionsData)}
+          >
+            Sessions
+          </button>
+        </div>
+        <div className="flex">
+          <input className="w-2/4 m-2 border-2 border-black" type="text" />
 
-          <div>
-            <p>Sessions</p>
-            <div className="grid w-full grid-cols-2 p-2 border-2">
-              {workouts.map((workout, index) => (
-                <Workout
-                  setOpen={setOpen}
-                  setIndex={setIndex}
-                  key={index}
-                  name={workout.name}
-                  index={index}
-                />
-              ))}
-            </div>
+          <div className="flex w-2/4 m-1">
+            <button className="w-2/4 m-1 border-2 border-black">Search</button>
+
+            <button
+              onClick={() => Open()}
+              className="w-2/4 m-1 border-2 border-black"
+            >
+              Add New
+            </button>
           </div>
         </div>
-      )}
-    </>
+        <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
+          {tab.map((workout, index) => (
+            <Display
+              Open={Open}
+              setIndex={setIndex}
+              key={index}
+              name={workout.name}
+              index={index}
+              img={workout.img}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
-export default Workouts;
+export default WorkoutsPage;
