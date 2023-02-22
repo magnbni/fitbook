@@ -30,9 +30,9 @@ function Login() {
         <input
           className="text-black mb-3 mt-1"
           value={word}
-          type="text"
           id="passwordID"
           placeholder="Password"
+          type="password"
           onChange={(e) => setWord(e.target.value)}
         ></input>
         <button
