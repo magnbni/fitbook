@@ -23,11 +23,9 @@ const Profile: NextPage = () => {
     docRef = doc(db, "users", username);
     docSnap = await getDoc(docRef);
     if (docSnap.exists() && docSnap.exists()) {
-      if (docSnap.get("username") != undefined) {
-        const pictureInDatabase = docSnap.get("picture");
-        setImgsrc(pictureInDatabase);
-        console.log(pictureInDatabase);
-      }
+      const pictureInDatabase = docSnap.get("picture");
+      setImgsrc(pictureInDatabase);
+      console.log(pictureInDatabase);
     } else {
       signOut();
     }
@@ -43,11 +41,9 @@ const Profile: NextPage = () => {
     const docSnap = await getDoc(docRef);
 
     if (docSnapActive.exists() && docSnap.exists()) {
-      if (docSnap.get("username") != undefined) {
-        const username = docSnap.get("username");
-        setUsernamesrc(username);
-        setName("@" + username);
-      }
+      const username = docSnap.get("username");
+      setUsernamesrc(username);
+      setName("@" + username);
     } else {
       signOut();
     }
