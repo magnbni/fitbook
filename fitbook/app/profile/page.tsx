@@ -6,13 +6,15 @@ import AddFriend from "../../components/AddFriend";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { signOut } from "next-auth/react";
-import { useRef } from "react";
+import { use, useRef, useState } from "react";
 import React from "react";
 
 const Profile: NextPage = () => {
-  const imgsrc = useRef(document.createElement("img"));
-  const namesrc = useRef(document.createElement("p"));
-  const usernamesrc = useRef(document.createElement("p"));
+  const [imgsrc, setImgsrc] = useState(
+    "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png"
+  );
+  const [usernamesrc, setUsernamesrc] = useState("");
+  const [namesrc, setName] = useState("");
 
   const generateImage = async () => {
     let docRef = doc(db, "activeUsers", "1");
@@ -20,9 +22,13 @@ const Profile: NextPage = () => {
     const username = docSnap.get("username");
     docRef = doc(db, "users", username);
     docSnap = await getDoc(docRef);
-    if (docSnap.exists() && docSnap.exists()) {
+    if (
+      docSnap.exists() &&
+      docSnap.exists() &&
+      docSnap.get("picture") != undefined
+    ) {
       const pictureInDatabase = docSnap.get("picture");
-      imgsrc.current.src = pictureInDatabase;
+      setImgsrc(pictureInDatabase);
       console.log(pictureInDatabase);
     } else {
       signOut();
@@ -38,10 +44,14 @@ const Profile: NextPage = () => {
     const docRef = doc(db, "users", username);
     const docSnap = await getDoc(docRef);
 
-    if (docSnapActive.exists() && docSnap.exists()) {
+    if (
+      docSnapActive.exists() &&
+      docSnap.exists() &&
+      docSnap.get("username") != undefined
+    ) {
       const username = docSnap.get("username");
-      namesrc.current.innerHTML = username;
-      usernamesrc.current.innerHTML = "@" + username;
+      setUsernamesrc(username);
+      setName("@" + username);
     } else {
       signOut();
     }
@@ -57,19 +67,16 @@ const Profile: NextPage = () => {
           {/* Modify to show users image and username */}
           <img
             className="w-50 h-50 rounded-full shadow-inner"
-            src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+            src={imgsrc}
             id="img"
-            ref={imgsrc}
           />
         </div>
         <div className="flex w-9/12 justify-between items-end">
           <div className="flex flex-col justify-end">
-            <p
-              className="text-primary font-black text-xl"
-              id="name"
-              ref={namesrc}
-            ></p>
-            <p className="text-black font text" ref={usernamesrc}></p>
+            <p className="text-primary font-black text-xl" id="name">
+              {usernamesrc}
+            </p>
+            <p className="text-black font text">{namesrc}</p>
           </div>
           <AddFriend />
         </div>
