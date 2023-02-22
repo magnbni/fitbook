@@ -3,6 +3,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { signOut } from "next-auth/react";
 import React, { useState, useRef } from "react";
 import { db } from "../../firebase";
+import Header from "../Header";
 
 const ChangeProfilePicture = () => {
   const [clicked, setClicked] = useState(false);
@@ -27,6 +28,7 @@ const ChangeProfilePicture = () => {
     } else {
       signOut();
     }
+    window.location.reload();
   };
 
   const inputRef = useRef(document.createElement("input"));
