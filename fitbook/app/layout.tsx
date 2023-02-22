@@ -34,7 +34,7 @@ export default async function RootLayout({
                 </div>
                 <div className="flex justify-center w-6/12">{children}</div>
                 <div className="fixed right-0 flex justify-center w-3/12 ">
-                  right panel
+                  Advertisement
                 </div>
               </div>
             </div>
