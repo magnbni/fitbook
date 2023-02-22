@@ -19,14 +19,12 @@ function Header() {
     const username = docSnap.get("username");
     docRef = doc(db, "users", username);
     docSnap = await getDoc(docRef);
-    if (
-      docSnap.exists() &&
-      docSnap.exists() &&
-      docSnap.get("picture") != undefined
-    ) {
-      const pictureInDatabase = docSnap.get("picture");
-      setImgsrc(pictureInDatabase);
-      console.log(pictureInDatabase);
+    if (docSnap.exists() && docSnap.exists()) {
+      if (docSnap.get("username") != undefined) {
+        const pictureInDatabase = docSnap.get("picture");
+        setImgsrc(pictureInDatabase);
+        console.log(pictureInDatabase);
+      }
     } else {
       signOut();
     }
@@ -41,13 +39,11 @@ function Header() {
     const docRef = doc(db, "users", username);
     const docSnap = await getDoc(docRef);
 
-    if (
-      docSnapActive.exists() &&
-      docSnap.exists() &&
-      docSnap.get("username") != undefined
-    ) {
-      const username = docSnap.get("username");
-      setUsernamesrc(username);
+    if (docSnapActive.exists() && docSnap.exists()) {
+      if (docSnap.get("username") != undefined) {
+        const username = docSnap.get("username");
+        setUsernamesrc(username);
+      }
     } else {
       signOut();
     }
