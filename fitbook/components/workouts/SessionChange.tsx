@@ -10,7 +10,6 @@ type Props = {
 };
 
 function SessionChange({ name, setOpen }: Props) {
-  const [sessionAddOpen, setSessionAddOpen] = useState(false);
   const [week, setWeek] = useState(0);
 
   const session1 = {

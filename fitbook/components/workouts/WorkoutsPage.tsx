@@ -14,10 +14,11 @@ type Session = {
 };
 
 type Props = {
-  open: number;
+  tab: number;
   workoutsData: Array<Workout>;
   sessionsData: Array<Session>;
   setOpen: (value: number) => void;
+  setTab: (value: number) => void;
   setIndex: (value: number) => void;
 };
 
@@ -26,27 +27,21 @@ function WorkoutsPage({
   workoutsData,
   setIndex,
   setOpen,
-  open,
+  setTab,
+  tab,
 }: Props) {
   function handleCreateNew() {
-    if (tab == workoutsData) {
-      setOpen(1);
-    } else if (tab == sessionsData) {
-      setOpen(2);
-    }
+    setOpen(tab + 1);
   }
+
+  const tabs = [workoutsData, sessionsData];
 
   function Open() {
-    if (tab == workoutsData) {
-      setOpen(1);
-    } else if (tab == sessionsData) {
-      setOpen(2);
-    }
+    setOpen(tab + 1);
   }
-  const [tab, setTab] = useState(workoutsData);
 
   return (
-    <div className="mb-4">
+    <div>
       <div className="mb-4">
         <ActiveWorkout />
       </div>
@@ -55,21 +50,21 @@ function WorkoutsPage({
         <div className="flex w-full rounded shadow-md">
           <button
             className={`w-1/2 p-2 text-center rounded-tl ${
-              tab == workoutsData
+              tab == 0
                 ? "bg-primary text-white"
                 : " border-primary border-2 text-primary"
             } `}
-            onClick={() => setTab(workoutsData)}
+            onClick={() => setTab(0)}
           >
             Workouts
           </button>
           <button
             className={`w-1/2 p-2 text-center rounded-tr ${
-              tab == sessionsData
+              tab == 1
                 ? "bg-primary text-white"
                 : "border-primary border-2 text-primary"
             } `}
-            onClick={() => setTab(sessionsData)}
+            onClick={() => setTab(1)}
           >
             Sessions
           </button>
@@ -89,7 +84,7 @@ function WorkoutsPage({
           </div>
         </div>
         <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
-          {tab.map((workout, index) => (
+          {tabs[tab].map((workout, index) => (
             <Display
               Open={Open}
               setIndex={setIndex}

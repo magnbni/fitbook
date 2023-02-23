@@ -53,7 +53,7 @@ const Profile: NextPage = () => {
   username();
 
   return (
-    <div className="flex flex-col w-full pl-4 mt-4 top-14">
+    <div className="flex flex-col w-full pl-4 top-14">
       <div className="flex pb-4 pl-4 border-b-4 border-opacity-50 flex-row-03 border-primary">
         <div className="flex float-left w-3/12 h-full justify">
           {/* Modify to show users image and username */}

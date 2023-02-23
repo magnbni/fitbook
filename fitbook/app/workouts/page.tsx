@@ -8,6 +8,7 @@ import WorkoutsPage from "../../components/workouts/WorkoutsPage";
 
 const Workouts: NextPage = () => {
   const [open, setOpen] = useState(0);
+  const [tab, setTab] = useState(0);
 
   const [index, setIndex] = useState(0);
 
@@ -36,9 +37,10 @@ const Workouts: NextPage = () => {
           : "flex flex-col w-full h-full"
       } `}
     >
-      <p className="p-4 text-2xl">My Workout Page</p>
+      <p className="mb-2 text-2xl">My Workout Page</p>
       <WorkoutsPage
-        open={open}
+        tab={tab}
+        setTab={setTab}
         workoutsData={workouts_data}
         sessionsData={sessions_data}
         setOpen={setOpen}
