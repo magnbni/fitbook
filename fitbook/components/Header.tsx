@@ -19,10 +19,7 @@ function Header() {
     const username = docSnap.get("username");
     docRef = doc(db, "users", username);
     docSnap = await getDoc(docRef);
-    if (
-      docSnap.exists() &&
-      docSnap.exists()
-    ) {
+    if (docSnap.exists() && docSnap.exists()) {
       const pictureInDatabase = docSnap.get("picture");
       setImgsrc(pictureInDatabase);
       console.log(pictureInDatabase);
@@ -40,10 +37,7 @@ function Header() {
     const docRef = doc(db, "users", username);
     const docSnap = await getDoc(docRef);
 
-    if (
-      docSnapActive.exists() &&
-      docSnap.exists()
-    ) {
+    if (docSnapActive.exists() && docSnap.exists()) {
       const username = docSnap.get("username");
       setUsernamesrc(username);
     } else {
@@ -55,16 +49,16 @@ function Header() {
   username();
 
   return (
-    <header className="shadow-xl h-14 w-full flex justify-between items-center p-4 bg-primary fixed top-0">
+    <header className="fixed top-0 z-40 flex items-center justify-between w-full p-4 shadow-xl h-14 bg-primary">
       <Link className="items-center" href={"/"}>
-        <p className="drop-shadow-md text-white text-2xl font-black tracking-wider">
+        <p className="text-2xl font-black tracking-wider text-white drop-shadow-md">
           fitbook
         </p>
       </Link>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Link
           href={"/profile"}
-          className="hover:scale-105 flex bg-white shadow-md items-center p-1 px-1 pr-2 h-10 rounded"
+          className="flex items-center h-10 p-1 px-1 pr-2 bg-white rounded shadow-md hover:scale-105"
         >
           <img
             src={imgsrc}
@@ -72,7 +66,7 @@ function Header() {
             id="img"
             alt="Rounded avatar"
           />{" "}
-          <p className="text-primary font-black pl-2" id="name">
+          <p className="pl-2 font-black text-primary" id="name">
             {usernamesrc}
           </p>
         </Link>

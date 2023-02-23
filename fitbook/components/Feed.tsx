@@ -3,7 +3,7 @@
 function Feed() {
   return (
     <>
-      <div className="flex flex-col justify-center w-full min-h-screen px-4 ">
+      <div className="flex flex-col justify-center w-full px-4 ">
         <div className="p-4 my-2 border-2 rounded ">
           <h4>
             <b>Twitt</b>
