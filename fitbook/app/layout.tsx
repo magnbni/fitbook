@@ -28,12 +28,14 @@ export default async function RootLayout({
           ) : (
             <div>
               <Header />
-              <div className="flex justify-center p-6 mt-14 ">
-                <div className="fixed left-0 flex justify-center w-3/12">
+              <div className="relative flex justify-center pb-4 h-fit top-14">
+                <div className="fixed left-0 z-0 flex justify-center w-1/5 p-2 ">
                   <Nav />
                 </div>
-                <div className="flex justify-center w-6/12">{children}</div>
-                <div className="fixed right-0 flex justify-center w-3/12 ">
+                <div className="flex justify-center w-3/5 pt-4 ">
+                  {children}
+                </div>
+                <div className="fixed right-0 z-0 flex justify-center w-1/5 ">
                   Advertisement
                 </div>
               </div>

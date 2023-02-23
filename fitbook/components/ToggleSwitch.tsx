@@ -25,7 +25,7 @@ const ToggleSwitch = ({ activated, onActivate, onDisable }: Props) => {
     <div>
       <label className="switch">
         {checked ? (
-          <input onClick={turnOff} type="checkbox" checked />
+          <input onClick={turnOff} type="checkbox" defaultChecked />
         ) : (
           <input onClick={turnOn} type="checkbox" />
         )}
