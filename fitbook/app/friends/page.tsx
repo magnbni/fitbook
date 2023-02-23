@@ -1,26 +1,36 @@
 import type { NextPage } from "next";
 import Friend from "../../components/friends/Friend";
 import SearchFriend from "../../components/friends/SearchFriend";
+import { db, firebase } from "../../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { getDatabase, ref, onValue, child, get} from "firebase/database"
+
+
+
+const fetchfriends = async() => {
+
+
+  const docRef = doc(db, "activeusers", "1");
+  const docSnap = await getDoc(docRef)
+
+  console.log(docSnap.data())
+
+
+
+
+}
+
 
 const Friends: NextPage = () => {
-  const data = [
-    {
-      name: "Petter",
-      username: "muscleman13",
-      img: "https://flowbite.com/docs/images/people/profile-picture-5.jpg",
-    },
-    {
-      name: "Nils",
-      username: "nils_armstrong",
-      img: "https://flowbite.com/docs/images/people/profile-picture-5.jpg",
-    },
-    {
-      name: "Pedro",
-      username: "sensei",
-      img: "https://flowbite.com/docs/images/people/profile-picture-5.jpg",
-    },
-  ];
 
+  fetchfriends();
+  let data = [{
+
+    username: "hei",
+    name:"lars",
+    img:"awkd"
+
+  }];
   return (
     <div className="w-full">
       <SearchFriend />

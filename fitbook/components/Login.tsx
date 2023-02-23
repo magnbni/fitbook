@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { db, firebase } from "../firebase";
@@ -97,6 +96,7 @@ const signUp = async () => {
   const docData = {
     username: username,
     password: password,
+    friends: [""],
     picture: "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png"
   };
   const docData2 = {
