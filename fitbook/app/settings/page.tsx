@@ -1,7 +1,11 @@
 "use client";
 import type { NextPage } from "next";
 import DeleteUser from "../../components/settings/DeleteUser";
+import ChangePassword from "../../components/settings/ChangePassword";
 import ToggleSwitch from "../../components/ToggleSwitch";
+import { doc } from "firebase/firestore";
+import { db } from "../../firebase";
+import ChangeProfilePicture from "../../components/settings/ChangeProfilePicture";
 
 const Settings: NextPage = () => {
   return (
@@ -40,6 +44,12 @@ const Settings: NextPage = () => {
         </div>
       </div>
       <div className="flex flex-row-05 p-5">
+        <ChangePassword />
+      </div>
+      <div className="flex flex-row-05 p-5">
+        <ChangeProfilePicture />
+      </div>
+      <div className="flex flex-row-06 p-5">
         <DeleteUser />
       </div>
     </div>

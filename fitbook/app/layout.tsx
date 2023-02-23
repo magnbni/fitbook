@@ -32,11 +32,9 @@ export default async function RootLayout({
                 <div className="fixed left-0 z-0 flex justify-center w-1/5 p-2 top-14">
                   <Nav />
                 </div>
-                <div className="relative z-10 flex w-3/5 px-4 top-14 ">
-                  {children}
-                </div>
-                <div className="fixed right-0 z-0 flex justify-center w-1/5 p-2 top-14">
-                  <div>Annonseeeeeeeeeeeeeeeeeeeee</div>
+                <div className="flex justify-center w-6/12">{children}</div>
+                <div className="fixed right-0 flex justify-center w-3/12 ">
+                  Advertisement
                 </div>
               </div>
             </div>
