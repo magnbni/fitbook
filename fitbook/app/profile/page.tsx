@@ -6,21 +6,21 @@ import AddFriend from "../../components/AddFriend";
 
 const Profile: NextPage = () => {
   return (
-    <div className="w-full flex flex-col top-14 pl-4">
-      <div className="flex flex-row-03 pl-4 pb-4 border-b-4 border-primary border-opacity-50">
-        <div className="h-full w-3/12 flex justify float-left">
+    <div className="flex flex-col w-full pl-4 mt-4 top-14">
+      <div className="flex pb-4 pl-4 border-b-4 border-opacity-50 flex-row-03 border-primary">
+        <div className="flex float-left w-3/12 h-full justify">
           {/* Modify to show users image and username */}
           <img
-            className="w-50 h-50 rounded-full shadow-inner"
-            src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+            className="rounded-full shadow-inner w-50 h-50"
+            src="/bola.jpeg"
           />
         </div>
-        <div className="flex w-9/12 justify-between items-end">
+        <div className="flex items-end justify-between w-9/12">
           <div className="flex flex-col justify-end">
-            <p className="text-primary font-black text-xl">Fred Ole</p>
-            <p className="text-black font text"> @FredOle</p>
+            <p className="text-xl font-black text-primary">Lars Magne</p>
+            <p className="text-black font text"> @LarsMagne</p>
           </div>
-          <AddFriend/>
+          <AddFriend />
         </div>
       </div>
       <div className="pt-2">

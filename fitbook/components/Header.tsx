@@ -18,10 +18,10 @@ function Header() {
         >
           <img
             className="w-8 h-8 rounded shadow-inner"
-            src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+            src="/bola.jpeg"
             alt="Rounded avatar"
-          />{" "}
-          <p className="pl-2 font-black text-primary">Fred Ole</p>
+          />
+          <p className="pl-2 font-black text-primary">Lars Magne</p>
         </Link>
         <Logout />
       </div>
