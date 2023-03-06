@@ -2,8 +2,8 @@
 
 import type { NextPage } from "next";
 import { useState } from "react";
-import SessionChange from "../../components/workouts/SessionChange";
-import WorkoutChange from "../../components/workouts/WorkoutChange";
+import SessionChange from "../../components/workouts/Sessions/SessionChange";
+import WorkoutChange from "../../components/workouts/Workouts/WorkoutChange";
 import WorkoutsPage from "../../components/workouts/WorkoutsPage";
 
 const Workouts: NextPage = () => {

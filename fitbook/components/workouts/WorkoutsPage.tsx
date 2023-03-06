@@ -1,7 +1,7 @@
-import { useState } from "react";
 import ActiveWorkout from "./ActiveWorkout";
 
-import Display from "./Display";
+import SessionsTab from "./Sessions/SessionsTab";
+import WorkoutsTab from "./Workouts/WorkoutsTab";
 
 type Workout = {
   name: String;
@@ -30,18 +30,16 @@ function WorkoutsPage({
   setTab,
   tab,
 }: Props) {
-  function handleCreateNew() {
-    setOpen(tab + 1);
-  }
-
-  const tabs = [workoutsData, sessionsData];
-
   function Open() {
     setOpen(tab + 1);
   }
 
+  const marked = "w-1/2 p-2 text-center font-bold bg-primary text-white";
+  const notMarked =
+    "w-1/2 p-2 text-center  font-bold border-primary border-2 text-primary";
+
   return (
-    <div>
+    <>
       <div className="mb-4">
         <ActiveWorkout />
       </div>
@@ -49,54 +47,27 @@ function WorkoutsPage({
       <div className="flex flex-col w-full rounded shadow-lg">
         <div className="flex w-full rounded shadow-md">
           <button
-            className={`w-1/2 p-2 text-center rounded-tl ${
-              tab == 0
-                ? "bg-primary text-white"
-                : " border-primary border-2 text-primary"
-            } `}
+            className={`${tab == 0 ? marked : notMarked} `}
             onClick={() => setTab(0)}
           >
             Workouts
           </button>
           <button
-            className={`w-1/2 p-2 text-center rounded-tr ${
-              tab == 1
-                ? "bg-primary text-white"
-                : "border-primary border-2 text-primary"
-            } `}
+            className={` ${tab == 1 ? marked : notMarked} `}
             onClick={() => setTab(1)}
           >
             Sessions
           </button>
         </div>
-        <div className="flex">
-          <input className="w-2/4 m-2 border-2 border-black" type="text" />
 
-          <div className="flex w-2/4 m-1">
-            <button className="w-2/4 m-1 border-2 border-black">Search</button>
-
-            <button
-              onClick={() => Open()}
-              className="w-2/4 m-1 border-2 border-black"
-            >
-              Add New
-            </button>
-          </div>
-        </div>
-        <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
-          {tabs[tab].map((workout, index) => (
-            <Display
-              Open={Open}
-              setIndex={setIndex}
-              key={index}
-              name={workout.name}
-              index={index}
-              img={workout.img}
-            />
-          ))}
-        </div>
+        {tab === 0 && (
+          <WorkoutsTab data={workoutsData} Open={Open} setIndex={setIndex} />
+        )}
+        {tab === 1 && (
+          <SessionsTab data={sessionsData} Open={Open} setIndex={setIndex} />
+        )}
       </div>
-    </div>
+    </>
   );
 }
 

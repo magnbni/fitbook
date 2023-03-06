@@ -8,7 +8,7 @@ type Props = {
   setIndex: (value: number) => void;
 };
 
-function Display({ img, name, setIndex, Open, index }: Props) {
+function SessionsCard({ img, name, setIndex, Open, index }: Props) {
   return (
     <button
       onClick={() => {
@@ -25,4 +25,4 @@ function Display({ img, name, setIndex, Open, index }: Props) {
   );
 }
 
-export default Display;
+export default SessionsCard;

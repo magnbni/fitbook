@@ -3,7 +3,6 @@ import { deleteDoc, doc, getDoc } from "firebase/firestore";
 import { signOut } from "next-auth/react";
 import React, { useState } from "react";
 import { db } from "../../firebase";
-import Logout from "../Logout";
 
 const DeleteUser = () => {
   const [clicked, setClicked] = useState(false);
@@ -29,8 +28,8 @@ const DeleteUser = () => {
   return (
     <div>
       {clicked ? (
-        <div className="bg-green-50 rounded p-2">
-          <p className="text-center font-light">
+        <div className="p-2 rounded bg-green-50">
+          <p className="font-light text-center">
             Are you sure you want to delete your account?
             <br />
             <br />
@@ -38,7 +37,7 @@ const DeleteUser = () => {
           </p>
           <div className="flex items-center justify-center">
             <button
-              className="m-5 bg-red-400 object-right text-center rounded text-white p-2 font-bold"
+              className="object-right p-2 m-5 font-bold text-center text-white bg-red-400 rounded"
               onClick={() => {
                 setClicked(!clicked);
               }}
@@ -46,7 +45,7 @@ const DeleteUser = () => {
               Cancel
             </button>
             <button
-              className="m-5 bg-red-400 w-1/4 object-right text-center rounded text-white p-2 font-bold"
+              className="object-right w-1/4 p-2 m-5 font-bold text-center text-white bg-red-400 rounded"
               onClick={deleteThisUser}
             >
               Delete
@@ -55,7 +54,7 @@ const DeleteUser = () => {
         </div>
       ) : (
         <button
-          className="bg-red-400 object-right text-center rounded text-white p-2 font-bold"
+          className="object-right p-2 font-bold text-center text-white bg-red-400 rounded"
           onClick={() => {
             setClicked(!clicked);
           }}
