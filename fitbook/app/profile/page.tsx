@@ -42,7 +42,7 @@ const Profile: NextPage = () => {
 
     if (docSnapActive.exists() && docSnap.exists()) {
       const username = docSnap.get("username");
-      setUsernamesrc(username);
+      setUsernamesrc(String(username).toUpperCase());
       setName("@" + username);
     } else {
       signOut();
