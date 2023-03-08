@@ -11,7 +11,6 @@ const ChangeProfilePicture = () => {
   const changeProfilePicture = async () => {
     setClicked(!clicked);
     let pictureLink = inputRef.current.value;
-    console.log(pictureLink);
 
     const docData = { pictureLink: pictureLink };
     const docRefActive = doc(db, "activeUsers", "1");

@@ -10,7 +10,6 @@ const ChangePassword = () => {
   const changePassword = async () => {
     setClicked(!clicked);
     let password = inputRef.current.value;
-    console.log(password);
     const docData = { password: password };
     const docRefActive = doc(db, "activeUsers", "1");
     const docSnapActive = await getDoc(docRefActive);

@@ -4,7 +4,8 @@ import FitbookPostWithImage from "./feed/FitBookPostWithImage";
 
 function Feed() {
   return (
-    <>
+    <div className="flex flex-col w-full pl-4 top-14">
+      <Post /> 
       <div className="flex flex-col justify-center w-full px-4 ">
         <div className="p-4 my-2 border-2 rounded ">
           <div>
@@ -17,10 +18,7 @@ function Feed() {
           <h4>
             <b>Twitt</b>
           </h4>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis dolore
-          aperiam aspernatur cumque veritatis quia aliquid sapiente quisquam
-          sequi voluptatibus, eveniet, a corporis ab dolores cupiditate natus
-          perspiciatis rerum est.
+          hi
         </div>
         <div className="p-4 my-2 border-2 rounded ">
           <h4>
@@ -92,7 +90,7 @@ function Feed() {
           perspiciatis rerum est.
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
