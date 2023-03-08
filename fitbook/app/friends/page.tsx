@@ -13,21 +13,22 @@ const Friends: NextPage = () => {
 
 
   let users: User[] = [];
+  let fetch: object[] = [];
 
   //const [users1, setusers] = useState<[]>([]);
   const colRef = collection(db, 'users');
 
   onSnapshot(colRef, (snapshot) => {
     snapshot.docs.forEach((doc) => {
-      users.push({
-        ...doc.data(),
-        userID: "",
-        name: "",
-        userName: "",
-        img: ""
+      fetch.push({
+        ...doc.data()
       })
     })
+    console.log(fetch)
   })
+
+
+
     return (
       <div className="w-full">
         <SearchFriend />
