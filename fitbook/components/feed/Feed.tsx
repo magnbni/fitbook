@@ -1,11 +1,11 @@
 "use client";
 
-import FitbookPostWithImage from "./feed/FitBookPostWithImage";
+import FitbookPostWithImage from "./FitBookPostWithImage";
 
 function Feed() {
   return (
     <div className="flex flex-col w-full pl-4 top-14">
-      <Post /> 
+      <Post />
       <div className="flex flex-col justify-center w-full px-4 ">
         <div className="p-4 my-2 border-2 rounded ">
           <div>

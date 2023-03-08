@@ -7,7 +7,7 @@ import { db } from "../../firebase";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 import React from "react";
-import UserFeed from "../../components/UserFeed";
+import UserFeed from "../../components/feed/UserFeed";
 
 const Profile: NextPage = () => {
   const [imgsrc, setImgsrc] = useState(
