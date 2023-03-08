@@ -1,6 +1,6 @@
 "use client";
 
-import Post from "./Post";
+import FitbookPostWithImage from "./feed/FitBookPostWithImage";
 
 function Feed() {
   return (
@@ -8,6 +8,13 @@ function Feed() {
       <Post /> 
       <div className="flex flex-col justify-center w-full px-4 ">
         <div className="p-4 my-2 border-2 rounded ">
+          <div>
+            <FitbookPostWithImage
+              text="This is an example post on Instagram"
+              username="example_user"
+              imageUrl="https://www.sciencenews.org/wp-content/uploads/2022/04/042822_AG_dog-breeds_feats-1030x580.jpg" // Legg til bilde-URL for posten
+            />
+          </div>
           <h4>
             <b>Twitt</b>
           </h4>
