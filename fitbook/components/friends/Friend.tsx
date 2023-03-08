@@ -1,13 +1,14 @@
 "use client";
 import React from "react";
 
-type Props = {
+export type User = {
+  userID: string
   name: string;
   userName: string;
   img: string;
 };
 
-const Friend = ({ name, userName, img }: Props) => {
+const Friend = ({ name, userName, img }: User) => {
   const onClick = () => {
     alert(`@${userName} is no longer your friend.`);
   };
