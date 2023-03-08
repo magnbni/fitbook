@@ -22,7 +22,6 @@ function Header() {
     if (docSnap.exists() && docSnap.exists()) {
       const pictureInDatabase = docSnap.get("picture");
       setImgsrc(pictureInDatabase);
-      console.log(pictureInDatabase);
     } else {
       signOut();
     }

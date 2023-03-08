@@ -1,13 +1,13 @@
 "use client";
 
 import type { NextPage } from "next";
-import Feed from "../../components/Feed";
 import AddFriend from "../../components/AddFriend";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { signOut } from "next-auth/react";
-import { use, useRef, useState } from "react";
+import { useState } from "react";
 import React from "react";
+import UserFeed from "../../components/UserFeed";
 
 const Profile: NextPage = () => {
   const [imgsrc, setImgsrc] = useState(
@@ -25,7 +25,6 @@ const Profile: NextPage = () => {
     if (docSnap.exists() && docSnap.exists()) {
       const pictureInDatabase = docSnap.get("picture");
       setImgsrc(pictureInDatabase);
-      console.log(pictureInDatabase);
     } else {
       signOut();
     }
@@ -56,7 +55,6 @@ const Profile: NextPage = () => {
     <div className="flex flex-col w-full pl-4 top-14">
       <div className="flex pb-4 pl-4 border-b-4 border-opacity-50 flex-row-03 border-primary">
         <div className="flex float-left w-3/12 h-full justify">
-          {/* Modify to show users image and username */}
           <img
             className="rounded-full shadow-inner w-50 h-50"
             src={imgsrc}
@@ -74,7 +72,7 @@ const Profile: NextPage = () => {
         </div>
       </div>
       <div className="pt-2">
-        <Feed /> {/* Customize to only show users posts */}
+        <UserFeed /> {/* Customize to only show users posts */}
       </div>
     </div>
   );
