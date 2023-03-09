@@ -24,6 +24,7 @@ function UserFeed() {
   >([]);
   const [username, setUsername] = useState("");
   const [userPic, setUserpic] = useState("");
+
   useEffect(() => {
     findPosts();
   }, []);
@@ -35,7 +36,7 @@ function UserFeed() {
     const docRef = doc(db, "users", username);
     const docSnap = await getDoc(docRef);
     setUserpic(docSnap.get("picture"));
-
+    console.log(username);
     const postRef = collection(db, "users", username, "posts");
 
     // Create a query to retrieve all the documents in the subcollection

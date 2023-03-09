@@ -12,9 +12,11 @@ const FitbookPost = ({ text, username, imageUrl, profilepic }: Props) => {
   return (
     <div className="fitbook-post">
       <div className="post-header">
-        <div className="profile-pic">
-          <img src={profilepic} alt="Profile picture" />
-        </div>
+        {/* <div className="profile-pic-container"> */}
+          <div className="avatar">
+            <img src={profilepic} alt="Profile picture" />
+          </div>
+        {/* </div> */}
         <h2 className="username">{username}</h2>
       </div>
       <div className="post-image">
