@@ -13,7 +13,8 @@ function Feed() {
             <FitbookPostWithImage
               text="This is an example post on Instagram"
               username="example_user"
-              imageUrl="https://www.sciencenews.org/wp-content/uploads/2022/04/042822_AG_dog-breeds_feats-1030x580.jpg" // Legg til bilde-URL for posten
+              imageUrl="https://www.sciencenews.org/wp-content/uploads/2022/04/042822_AG_dog-breeds_feats-1030x580.jpg"
+              profilepic=""
             />
           </div>
           <h4>

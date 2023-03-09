@@ -1,6 +1,12 @@
 "use client";
 
-import { doc, collection, addDoc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  addDoc,
+  getDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { db } from "../../firebase";
@@ -27,6 +33,7 @@ function Post() {
     const docData = {
       postText: text,
       postPicture: picture,
+      timestamp: serverTimestamp(),
     };
 
     const subcollectionRef = collection(userDocRef, "posts");
