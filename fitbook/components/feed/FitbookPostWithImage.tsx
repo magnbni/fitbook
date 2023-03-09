@@ -5,17 +5,16 @@ type Props = {
   text: string;
   username: string;
   imageUrl: string;
+  profilepic: string;
 };
 
-const FitbookPost = ({ text, username, imageUrl }: Props) => {
+const FitbookPost = ({ text, username, imageUrl, profilepic }: Props) => {
   return (
     <div className="fitbook-post">
       <div className="post-header">
-        <img
-          className="profile-pic"
-          src="https://via.placeholder.com/50x50" // Legg til bilde-URL for profilbilde
-          alt="Profile picture"
-        />
+        <div className="profile-pic">
+          <img src={profilepic} alt="Profile picture" />
+        </div>
         <h2 className="username">{username}</h2>
       </div>
       <div className="post-image">

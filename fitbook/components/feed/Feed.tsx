@@ -1,6 +1,7 @@
 "use client";
 
-import FitbookPostWithImage from "./FitBookPostWithImage";
+import Post from "./Post";
+import FitbookPostWithImage from "./FitbookPostWithImage";
 
 function Feed() {
   return (
