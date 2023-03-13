@@ -3,6 +3,8 @@
 import {
   collection,
   doc,
+  DocumentData,
+  DocumentReference,
   getDoc,
   getDocs,
   query,
@@ -14,60 +16,72 @@ import { db } from "../../firebase";
 import FitbookPostWithImage from "./FitbookPostWithImage";
 
 function UserFeed() {
+  const { data: session } = useSession();
   const [posts, setPosts] = useState<
     {
       id: string;
+      username: string;
+      picture: string;
       postText: string;
       postPicture: string;
       timestamp: Timestamp;
     }[]
   >([]);
-  const [username, setUsername] = useState("");
-  const [userPic, setUserpic] = useState("");
+  const [userRef, setUserRef] = useState<DocumentReference<DocumentData>>();
+  useEffect(() => {
+    findUser();
+  }, [session]);
 
   useEffect(() => {
     findPosts();
-  }, []);
+  }, [userRef]);
 
+  console.log(userRef);
   // Get a reference to the subcollection
   const findPosts = async () => {
-    const username = await findUser();
-    setUsername(username);
-    const docRef = doc(db, "users", username);
-    const docSnap = await getDoc(docRef);
-    setUserpic(docSnap.get("picture"));
-    console.log(username);
-    const postRef = collection(db, "users", username, "posts");
+    if (userRef) {
+      console.log("Finding users");
 
-    // Create a query to retrieve all the documents in the subcollection
-    const postQuery = query(postRef);
+      const docSnap = await getDoc(userRef);
 
-    const querySnapshot = await getDocs(postQuery);
+      const postRef = collection(db, "users", docSnap.get("username"), "posts");
 
-    const posts = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        postText: data.postText,
-        postPicture: data.postPicture,
-        timestamp: data.timestamp,
-      };
-    });
-    setPosts(posts);
-    posts.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+      // Create a query to retrieve all the documents in the subcollection
+      const postQuery = query(postRef);
+
+      const querySnapshot = await getDocs(postQuery);
+
+      const posts = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          username: docSnap.get("username"),
+          picture: docSnap.get("picture"),
+          postText: data.postText,
+          postPicture: data.postPicture,
+          timestamp: data.timestamp,
+        };
+      });
+      setPosts(posts);
+      posts.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+    }
   };
 
-  const { data: session } = useSession();
   const findUser = async () => {
-    if (session) {
-      const docRef = doc(db, "activeUsers", "1");
-      const docSnap = await getDoc(docRef);
+    const activeDocRef = doc(db, "activeUsers", "1");
+    const activeDocSnap = await getDoc(activeDocRef);
 
-      if (!docSnap.exists()) {
-        alert(`Database error`);
-        signOut();
-      } else {
-        return docSnap.get("username");
+    if (!activeDocSnap.exists()) {
+      alert(`Database error`);
+      signOut();
+    } else {
+      const username = activeDocSnap.get("username");
+
+      const userDocRef = doc(db, "users", username);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        setUserRef(userDocRef);
       }
     }
   };
@@ -80,9 +94,9 @@ function UserFeed() {
             {post.postPicture && post.postPicture.length > 0 && (
               <FitbookPostWithImage
                 text={post.postText}
-                username={username}
+                username={post.username}
                 imageUrl={post.postPicture}
-                profilepic={userPic}
+                profilepic={post.picture}
               />
             )}
           </div>
