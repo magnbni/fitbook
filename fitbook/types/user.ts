@@ -2,10 +2,17 @@ import { Workout } from "./workouts";
 
 
 export interface User {
-    id: String,
-    username: String,
-    password: String,
-    img: String,
+    username: string,
+    password: string,
+    img: string,
+    active: string;
     workouts: Array<Workout>,
+    followers: Array<UserPublic>
+    follows: Array<UserPublic>
     
+}
+
+export interface UserPublic {
+    username: string,
+    img: string,
 }

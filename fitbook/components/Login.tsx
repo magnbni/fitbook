@@ -6,6 +6,8 @@ import { db, firebase } from "../firebase";
 import { collection, doc, setDoc, addDoc, getDoc } from "firebase/firestore";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { User } from "../types/user";
+import { WorkoutDto } from "../types/workouts";
 
 function Login() {
   let usernameValue: String;
@@ -97,8 +99,7 @@ const signUp = async () => {
   const docData = {
     username: username,
     password: password,
-    picture:
-      "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png",
+    img: "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png",
   };
 
   const docData2 = {

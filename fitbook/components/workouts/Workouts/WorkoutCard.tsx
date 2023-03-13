@@ -4,16 +4,16 @@ type Props = {
   name: String;
   index: number;
   img: string;
-  Open: () => void;
+  setOpen: (value: boolean) => void;
   setIndex: (value: number) => void;
 };
 
-function WorkoutCard({ img, name, setIndex, Open, index }: Props) {
+function WorkoutCard({ img, name, setIndex, setOpen, index }: Props) {
   return (
     <button
       onClick={() => {
         setIndex(index);
-        Open();
+        setOpen(true);
       }}
       className="relative flex-wrap w-full border-2"
     >

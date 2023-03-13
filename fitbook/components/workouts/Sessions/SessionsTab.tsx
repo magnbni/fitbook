@@ -1,35 +1,30 @@
+import { DocumentData, DocumentReference } from "firebase/firestore";
 import { useState } from "react";
+import { SessionDto } from "../../../types/workouts";
 import SessionsCard from "./SessionsCard";
 
 type Props = {
-  data: Array<Session>;
+  data: SessionDto[];
   Open: () => void;
   setIndex: (value: number) => void;
 };
 
-type Session = {
-  name: String;
-  img: string;
-};
-
 function SessionsTab({ data, setIndex, Open }: Props) {
-  const [state, setstate] = useState({
-    query: "",
-    list: data as Session[],
-  });
+  const [query, setQuery] = useState("");
+  const [queryList, setQueryList] = useState<SessionDto[]>(data);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
     const results = data.filter((session) => {
-      if (event.target.value === "") return data;
-
+      if (event.target.value === "") {
+        return data;
+      }
       return session.name
         .toLowerCase()
         .includes(event.target.value.toLowerCase());
     });
-    setstate({
-      query: event.target.value,
-      list: results,
-    });
+
+    setQueryList(results);
   };
   return (
     <>
@@ -51,20 +46,20 @@ function SessionsTab({ data, setIndex, Open }: Props) {
         </button>
       </div>
       <div>
-        {!state.list.length ? (
+        {!queryList.length ? (
           <div className="flex flex-col justify-center w-full text-4xl text-center h-80">
             No results for your search
           </div>
         ) : (
           <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
-            {state.list.map((workout, index) => (
+            {queryList.map((session, index) => (
               <SessionsCard
                 Open={Open}
                 setIndex={setIndex}
                 key={index}
-                name={workout.name}
+                name={session.name}
                 index={index}
-                img={workout.img}
+                img={"/session.jpg"}
               />
             ))}
           </div>
