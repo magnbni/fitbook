@@ -178,6 +178,8 @@ const Progression: NextPage = () => {
         </div> */}
       </div>
     </div>
+    
+
   );
 };
 

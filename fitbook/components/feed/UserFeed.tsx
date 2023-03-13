@@ -14,6 +14,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import FitbookPostWithImage from "./FitbookPostWithImage";
+import Post from "./Post";
 
 function UserFeed() {
   const { data: session } = useSession();
@@ -90,6 +91,8 @@ function UserFeed() {
 
   return (
     <div className="flex flex-col w-full pl-4 top-14">
+    <Post/ >
+    <div className="flex flex-col w-full pl-4 top-14">
       {posts.map((post) => {
         return (
           <div className="p-4 my-2 border-2 rounded " key={post.id}>
@@ -104,6 +107,7 @@ function UserFeed() {
           </div>
         );
       })}
+    </div>
     </div>
   );
 }
