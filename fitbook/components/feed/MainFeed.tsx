@@ -120,7 +120,7 @@ function MainFeed() {
 
   return (
     <div className="flex flex-col w-full pl-4 top-14">
-      <Post />
+      {/* <Post /> */}
       <div className="flex flex-col w-full pl-4 top-14">
         {posts.map((post) => {
           return (
