@@ -36,7 +36,7 @@ function Post() {
       timestamp: serverTimestamp(),
     };
 
-    const subcollectionRef = collection(userDocRef, "posts");
+    const subcollectionRef = collection(userDocRef, "imagePosts");
     addDoc(subcollectionRef, docData)
       .then(() => {
         console.log("Document successfully written!");

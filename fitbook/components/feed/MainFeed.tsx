@@ -8,7 +8,7 @@ import {
   query,
   Timestamp,
 } from "firebase/firestore";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import FitbookPostWithImage from "./FitbookPostWithImage";
@@ -94,19 +94,7 @@ function MainFeed() {
     return friends;
   }
 
-  const { data: session } = useSession();
   const findUser = async () => {
-    if (session) {
-      const docRef = doc(db, "activeUsers", "1");
-      const docSnap = await getDoc(docRef);
-      if (!docSnap.exists()) {
-        alert(`Database error`);
-        signOut();
-      } else {
-        return docSnap.get("username");
-      }
-    } else {
-      //DETTE ER IKKE BRA <3
       const docRef = doc(db, "activeUsers", "1");
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
@@ -116,7 +104,6 @@ function MainFeed() {
         return docSnap.get("username");
       }
     }
-  };
 
   return (
     <div className="flex flex-col w-full pl-4 top-14">
