@@ -27,7 +27,9 @@ function UserFeed() {
       timestamp: Timestamp;
     }[]
   >([]);
+
   const [userRef, setUserRef] = useState<DocumentReference<DocumentData>>();
+  
   useEffect(() => {
     findUser();
   }, [session]);
