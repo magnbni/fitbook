@@ -14,6 +14,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import FitbookPostWithImage from "./FitbookPostWithImage";
+import FitbookPostWorkout from "./FitbookPostWorkout";
 import Post from "./Post";
 
 function MainFeed() {
@@ -50,7 +51,7 @@ function MainFeed() {
     type: string;
     username: string;
     profilepic: string;
-    workout: string;
+    workout: Workout;
     timestamp: Timestamp;
 
     constructor(
@@ -58,7 +59,7 @@ function MainFeed() {
       type: string,
       username: string,
       profilepic: string,
-      workout: string,
+      workout: Workout,
       timestamp: Timestamp
     ) {
       this.id = id;
@@ -67,6 +68,41 @@ function MainFeed() {
       this.profilepic = profilepic;
       this.workout = workout;
       this.timestamp = timestamp;
+    }
+  }
+
+  class Workout {
+    name: string;
+    timestampStart: Timestamp;
+    timestampEnd: Timestamp;
+    exercises: Array<Exercise>;
+
+    constructor(
+      name: string,
+      timestampStart: Timestamp,
+      timestampEnd: Timestamp,
+      exercises: Array<Exercise>,
+    ) {
+      this.name = name;
+      this.timestampStart = timestampStart;
+      this.timestampEnd = timestampEnd;
+      this.exercises = exercises;
+    }
+  }
+
+  class Exercise {
+    name: string;
+    repetition: number;
+    sets: number;
+
+    constructor(
+      name: string,
+      repetition: number,
+      sets: number,
+    ) {
+      this.name = name;
+      this.repetition = repetition;
+      this.sets = sets;
     }
   }
 
@@ -121,7 +157,7 @@ function MainFeed() {
         };
       });
       await findImagePosts(friendsData);
-      // await findWorkoutPosts(friendsData);
+      await findWorkoutPosts(friendsData);
     }
   };
 
@@ -150,41 +186,42 @@ function MainFeed() {
       });
     }
   };
+  const findWorkoutPosts = async (friends: { username: string }[]) => {
+    for (const { username } of friends) {
+      const docRef = doc(db, "users", username);
+      const docSnap = await getDoc(docRef);
+      const postRef = collection(db, "users", username, "workoutPosts");
+      const postQuery = query(postRef);
 
-  // const findWorkoutPosts = async (friends: { username: string }[]) => {
-  //   // for (const { username } of friends) {
-  //   //   const docRef = doc(db, "users", username);
-  //   //   const docSnap = await getDoc(docRef);
-  //   //   const postRef = collection(db, "users", username, "workoutPosts");
-  //   //   const postQuery = query(postRef);
-  //   //   const querySnapshot = await getDocs(postQuery);
-  //   //   const posts = querySnapshot.docs.map((doc) => {
-  //   //     const data = doc.data();
-  //   //     return {
-  //   //       id: doc.id,
-  //   //       username: data.username,
-  //   //       profilepic: data.profilepic,
-  //   //       workout: data.workout,
-  //   //       timestamp: data.timestamp,
-  //   //     };
-  //   //   });
-  //   //   setWorkoutPosts((prevPosts) => [...prevPosts, ...posts]);
-  //   // }
-  //   // setWorkoutPosts((prevPosts) =>
-  //   //   [...prevPosts].sort((a, b) => b.timestamp.seconds - a.timestamp.seconds)
-  //   // );
-  // };
+      const querySnapshot = await getDocs(postQuery);
+      workoutPosts = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        let ex = new Exercise("navnøvelse", 4, 3); 
+        return new WorkoutPost(
+          doc.id,
+          "workoutPost",
+          username,
+          docSnap.get("picture"),
+          new Workout("navn", Timestamp.now(), Timestamp.now(), [ex]),
+          data.timestamp
+        );
+      });
+      workoutPosts.forEach((post) => {
+        combinedArray.push(post);
+      });
+    }
+  };
 
   async function allPosts() {
     await findUser();
-    // Sort the combined array by timestamp
+    console.log(combinedArray);
     combinedArray.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
     setCombinedPosts(combinedArray);
   }
 
   return (
     <div className="flex flex-col w-full pl-4 top-14">
-      {/* <Post /> */}
+      <Post />
       <div className="flex flex-col w-full pl-4 top-14">
         {combinedPosts.map((post) => {
           if (post.type === "imagePost") {
@@ -197,8 +234,15 @@ function MainFeed() {
                 profilepic={post.profilepic}
               />
             );
-          } else if (post.type === "workoutPosts") {
-            return;
+          } else if (post.type === "workoutPost") {
+            return (
+              <FitbookPostWorkout
+                key={post.id}
+                username={post.username}
+                profilepic={post.profilepic}
+                workout={(post as WorkoutPost).workout}
+              />
+            );
           }
           return;
         })}

@@ -1,11 +1,46 @@
+import { Timestamp } from "firebase/firestore";
 import React from "react";
 import "./FitbookPost.css"; // Importerer stilen for komponenten
 
 type Props = {
   username: string;
   profilepic: string;
-  workout: Record<string, number>;
+  workout: Workout;
 };
+class Workout {
+  name: string;
+  timestampStart: Timestamp;
+  timestampEnd: Timestamp;
+  exercises: Array<Exercise>;
+
+  constructor(
+    name: string,
+    timestampStart: Timestamp,
+    timestampEnd: Timestamp,
+    exercises: Array<Exercise>,
+  ) {
+    this.name = name;
+    this.timestampStart = timestampStart;
+    this.timestampEnd = timestampEnd;
+    this.exercises = exercises;
+  }
+}
+
+class Exercise {
+  name: string;
+  repetition: number;
+  sets: number;
+
+  constructor(
+    name: string,
+    repetition: number,
+    sets: number,
+  ) {
+    this.name = name;
+    this.repetition = repetition;
+    this.sets = sets;
+  }
+}
 
 const FitbookPost = ({ username, profilepic, workout }: Props) => {
   return (
@@ -35,10 +70,6 @@ const FitbookPost = ({ username, profilepic, workout }: Props) => {
             />
           </svg>
         </div>
-      </div>
-      <div className="post-image">
-        {/* TODO */}
-        <img src={imageUrl} alt="Post image" />
       </div>
       <div className="post-text">
         <div className="likeComment">
@@ -75,7 +106,7 @@ const FitbookPost = ({ username, profilepic, workout }: Props) => {
         </div>
         <hr />
         <p>
-          <b>{username}</b> {text}
+          <b>{username}</b> {workout.name}
         </p>
       </div>
     </div>
