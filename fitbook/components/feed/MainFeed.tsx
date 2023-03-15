@@ -19,6 +19,7 @@ import Post from "./Post";
 function MainFeed() {
   class ImagePost {
     id: string;
+    type: string;
     username: string;
     profilepic: string;
     postText: string;
@@ -27,6 +28,7 @@ function MainFeed() {
 
     constructor(
       id: string,
+      type: string,
       username: string,
       profilepic: string,
       postText: string,
@@ -34,6 +36,7 @@ function MainFeed() {
       timestamp: Timestamp
     ) {
       this.id = id;
+      this.type = type;
       this.username = username;
       this.profilepic = profilepic;
       this.postText = postText;
@@ -44,6 +47,7 @@ function MainFeed() {
 
   class WorkoutPost {
     id: string;
+    type: string;
     username: string;
     profilepic: string;
     workout: string;
@@ -51,12 +55,14 @@ function MainFeed() {
 
     constructor(
       id: string,
+      type: string,
       username: string,
       profilepic: string,
       workout: string,
       timestamp: Timestamp
     ) {
       this.id = id;
+      this.type = type;
       this.username = username;
       this.profilepic = profilepic;
       this.workout = workout;
@@ -66,19 +72,20 @@ function MainFeed() {
 
   type CombinedPost = ImagePost | WorkoutPost;
 
-  const [imagePosts, setImagePosts] = useState<ImagePost[]>([]);
-  const [workoutPosts, setWorkoutPosts] = useState<WorkoutPost[]>([]);
+  let imagePosts: ImagePost[];
+  let workoutPosts: WorkoutPost[];
+
+  let combinedArray: (ImagePost | WorkoutPost)[] = [];
+
   const [combinedPosts, setCombinedPosts] = useState<CombinedPost[]>([]);
-  const [friends, setFriends] = useState<{ username: string }[]>([]);
 
   const { data: session } = useSession();
 
-  const [userRef, setUserRef] = useState<DocumentReference<DocumentData>>();
-
   useEffect(() => {
-    console.log("finding posts");
-    allPosts();
-  }, []);
+    if (session) {
+      allPosts();
+    }
+  }, [session]);
 
   const findUser = async () => {
     const activeDocRef = doc(db, "activeUsers", "1");
@@ -94,17 +101,14 @@ function MainFeed() {
       const userDocSnap = await getDoc(userDocRef);
 
       if (userDocSnap.exists()) {
-        setUserRef(userDocRef);
-        console.log("user set");
+        await findFriends(userDocRef);
       }
     }
   };
 
-  const findFriends = async () => {
-    console.log("friends");
-    if (userRef) {
-      console.log("hello");
-      const docSnap = await getDoc(userRef);
+  const findFriends = async (userDocRef: DocumentReference<DocumentData>) => {
+    if (userDocRef) {
+      const docSnap = await getDoc(userDocRef);
       const username = docSnap.get("username");
 
       const friendRef = collection(db, "users", username, "friends");
@@ -116,74 +120,63 @@ function MainFeed() {
           username: data.username,
         };
       });
-      setFriends(friendsData);
+      await findImagePosts(friendsData);
+      // await findWorkoutPosts(friendsData);
     }
   };
 
-  const findImagePosts = async () => {
-    console.log("findimg");
+  const findImagePosts = async (friends: { username: string }[]) => {
     for (const { username } of friends) {
-      console.log(username);
       const docRef = doc(db, "users", username);
       const docSnap = await getDoc(docRef);
       const postRef = collection(db, "users", username, "imagePosts");
       const postQuery = query(postRef);
 
       const querySnapshot = await getDocs(postQuery);
-
-      const posts = querySnapshot.docs.map((doc) => {
+      imagePosts = querySnapshot.docs.map((doc) => {
         const data = doc.data();
-        return {
-          id: doc.id,
-          username: username,
-          profilepic: docSnap.get("picture"),
-          postText: data.postText,
-          postPicture: data.postPicture,
-          timestamp: data.timestamp,
-        };
+        return new ImagePost(
+          doc.id,
+          "imagePost",
+          username,
+          docSnap.get("picture"),
+          data.postText,
+          data.postPicture,
+          data.timestamp
+        );
       });
-      setImagePosts((prevPosts) => [...prevPosts, ...posts]);
+      imagePosts.forEach((post) => {
+        combinedArray.push(post);
+      });
     }
-    setImagePosts((prevPosts) =>
-      [...prevPosts].sort((a, b) => b.timestamp.seconds - a.timestamp.seconds)
-    );
   };
 
-  const findWorkoutPosts = async () => {
-    for (const { username } of friends) {
-      const docRef = doc(db, "users", username);
-      const docSnap = await getDoc(docRef);
-      const postRef = collection(db, "users", username, "workoutPosts");
-      const postQuery = query(postRef);
-
-      const querySnapshot = await getDocs(postQuery);
-
-      const posts = querySnapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          username: data.username,
-          profilepic: data.profilepic,
-          workout: data.workout,
-          timestamp: data.timestamp,
-        };
-      });
-      setWorkoutPosts((prevPosts) => [...prevPosts, ...posts]);
-    }
-    setWorkoutPosts((prevPosts) =>
-      [...prevPosts].sort((a, b) => b.timestamp.seconds - a.timestamp.seconds)
-    );
-  };
+  // const findWorkoutPosts = async (friends: { username: string }[]) => {
+  //   // for (const { username } of friends) {
+  //   //   const docRef = doc(db, "users", username);
+  //   //   const docSnap = await getDoc(docRef);
+  //   //   const postRef = collection(db, "users", username, "workoutPosts");
+  //   //   const postQuery = query(postRef);
+  //   //   const querySnapshot = await getDocs(postQuery);
+  //   //   const posts = querySnapshot.docs.map((doc) => {
+  //   //     const data = doc.data();
+  //   //     return {
+  //   //       id: doc.id,
+  //   //       username: data.username,
+  //   //       profilepic: data.profilepic,
+  //   //       workout: data.workout,
+  //   //       timestamp: data.timestamp,
+  //   //     };
+  //   //   });
+  //   //   setWorkoutPosts((prevPosts) => [...prevPosts, ...posts]);
+  //   // }
+  //   // setWorkoutPosts((prevPosts) =>
+  //   //   [...prevPosts].sort((a, b) => b.timestamp.seconds - a.timestamp.seconds)
+  //   // );
+  // };
 
   async function allPosts() {
     await findUser();
-    await findFriends();
-    await findImagePosts();
-    await findWorkoutPosts();
-    console.log("hei");
-    console.log("hhh");
-    const combinedArray = [...imagePosts, ...workoutPosts];
-    console.log(combinedArray);
     // Sort the combined array by timestamp
     combinedArray.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
     setCombinedPosts(combinedArray);
@@ -194,16 +187,17 @@ function MainFeed() {
       {/* <Post /> */}
       <div className="flex flex-col w-full pl-4 top-14">
         {combinedPosts.map((post) => {
-          if (post instanceof ImagePost) {
+          if (post.type === "imagePost") {
             return (
               <FitbookPostWithImage
-                text={post.postText}
+                key={post.id}
+                text={(post as ImagePost).postText}
                 username={post.username}
-                imageUrl={post.postPicture}
+                imageUrl={(post as ImagePost).postPicture}
                 profilepic={post.profilepic}
               />
             );
-          } else if (post instanceof WorkoutPost) {
+          } else if (post.type === "workoutPosts") {
             return;
           }
           return;

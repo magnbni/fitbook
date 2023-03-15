@@ -72,7 +72,7 @@ const Profile: NextPage = () => {
         </div>
       </div>
       <div className="pt-2">
-        <UserFeed /> {/* Customize to only show users posts */}
+        <UserFeed />
       </div>
     </div>
   );

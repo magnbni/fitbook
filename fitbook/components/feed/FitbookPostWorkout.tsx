@@ -2,13 +2,12 @@ import React from "react";
 import "./FitbookPost.css"; // Importerer stilen for komponenten
 
 type Props = {
-  text: string;
   username: string;
-  imageUrl: string;
   profilepic: string;
+  workout: Record<string, number>;
 };
 
-const FitbookPost = ({ text, username, imageUrl, profilepic }: Props) => {
+const FitbookPost = ({ username, profilepic, workout }: Props) => {
   return (
     <div className="fitbook-post">
       <div className="post-header">
@@ -38,6 +37,7 @@ const FitbookPost = ({ text, username, imageUrl, profilepic }: Props) => {
         </div>
       </div>
       <div className="post-image">
+        {/* TODO */}
         <img src={imageUrl} alt="Post image" />
       </div>
       <div className="post-text">
