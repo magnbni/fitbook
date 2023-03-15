@@ -10,7 +10,6 @@
 .post-header {
   display: flex;
   align-items: center;
-  
   width: 100%;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -37,7 +36,6 @@
 .avatar img {
   display: block;
   margin: 0 auto;
-  /* margin: 0 0 0 -20%; */
   max-width: 150%;
   max-height: 150%;
   width: auto;
