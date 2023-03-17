@@ -6,7 +6,7 @@ import SearchFriend from "../../components/friends/SearchFriend";
 import { db, firebase } from "../../firebase";
 import { collection, doc, Firestore, getDocs, getDoc, onSnapshot, query, where, QuerySnapshot } from "firebase/firestore";
 import { getDatabase, ref, onValue, child, get } from "firebase/database"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 let users: User[] = [{
   userID: "string",
@@ -21,13 +21,20 @@ let friends:any = []
 
 
 const Friends: NextPage = () => {
-
+  
+  let friendsobj:any[] = [];
   const activeUserRef = doc(db, 'activeUsers', "1");
   const AllUsersRef = collection(db, "users");
-
+  
   const [users, setusers] = useState({});
+  const [Ivar, setIVar] = useState("null")
 
+  useEffect(() => {
+    FriendsOfactiveUser();
+    console.log("Hei her har stud.ass vært og facka")
+  }, []);
 
+  
   let FriendsOfactiveUser = async () => {
     const docSnap = await getDoc(activeUserRef);
     const FriendsOfActiveUserRef = collection(db, "users", docSnap.get("username"), "friends");
@@ -42,7 +49,6 @@ const Friends: NextPage = () => {
     //legg inn where filtrering på denne under. () gjort??
     const FriendsOfActiveUserQuery = query(AllUsersRef, where("username", "in", friends))
 
-    let friendsobj:any[] = [];
     const resultofQuery = await getDocs(FriendsOfActiveUserQuery).then((snapshot) => {
       friendsobj = snapshot.docs.map(doc => doc.data())
     })
@@ -63,10 +69,8 @@ const Friends: NextPage = () => {
       })
       console.log(fetch)
     })
-
+    setusers(friendsobj)
   }
-
-  FriendsOfactiveUser();
 
   return (
     <div className="w-full">
