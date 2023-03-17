@@ -27,6 +27,8 @@ const Friends: NextPage = () => {
 
   const [users, setusers] = useState({});
 
+  let friendsobj:any[] = [];
+
 
   let FriendsOfactiveUser = async () => {
     const docSnap = await getDoc(activeUserRef);
@@ -42,7 +44,6 @@ const Friends: NextPage = () => {
     //legg inn where filtrering på denne under. () gjort??
     const FriendsOfActiveUserQuery = query(AllUsersRef, where("username", "in", friends))
 
-    let friendsobj:any[] = [];
     const resultofQuery = await getDocs(FriendsOfActiveUserQuery).then((snapshot) => {
       friendsobj = snapshot.docs.map(doc => doc.data())
     })
