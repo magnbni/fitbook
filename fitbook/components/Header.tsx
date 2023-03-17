@@ -44,12 +44,20 @@ function Header() {
     }
   };
 
+  const handleClick = () => {
+    window.location.href = "/";
+    setTimeout(() => {
+      window.
+      window.location.reload();
+    }, 1000);
+  };
+
   generateImage();
   username();
 
   return (
     <header className="fixed top-0 z-40 flex items-center justify-between w-full p-4 shadow-xl h-14 bg-primary">
-      <Link className="items-center" href={"/"}>
+      <Link className="items-center" href={"/"} onClick={handleClick}>
         <p className="text-2xl font-black tracking-wider text-white drop-shadow-md">
           fitbook
         </p>

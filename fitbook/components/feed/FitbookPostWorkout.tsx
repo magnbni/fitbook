@@ -1,46 +1,13 @@
 import { Timestamp } from "firebase/firestore";
 import React from "react";
 import "./FitbookPost.css"; // Importerer stilen for komponenten
+import {Workout} from "./MainFeed";
 
 type Props = {
   username: string;
   profilepic: string;
   workout: Workout;
 };
-class Workout {
-  name: string;
-  timestampStart: Timestamp;
-  timestampEnd: Timestamp;
-  exercises: Array<Exercise>;
-
-  constructor(
-    name: string,
-    timestampStart: Timestamp,
-    timestampEnd: Timestamp,
-    exercises: Array<Exercise>,
-  ) {
-    this.name = name;
-    this.timestampStart = timestampStart;
-    this.timestampEnd = timestampEnd;
-    this.exercises = exercises;
-  }
-}
-
-class Exercise {
-  name: string;
-  repetition: number;
-  sets: number;
-
-  constructor(
-    name: string,
-    repetition: number,
-    sets: number,
-  ) {
-    this.name = name;
-    this.repetition = repetition;
-    this.sets = sets;
-  }
-}
 
 const FitbookPost = ({ username, profilepic, workout }: Props) => {
   return (

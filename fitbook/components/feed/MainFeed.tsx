@@ -17,7 +17,39 @@ import FitbookPostWithImage from "./FitbookPostWithImage";
 import FitbookPostWorkout from "./FitbookPostWorkout";
 import Post from "./Post";
 
+export class Workout {
+  name: string;
+  timestampStart: Timestamp;
+  timestampEnd: Timestamp;
+  exercises: Array<Exercise>;
+
+  constructor(
+    name: string,
+    timestampStart: Timestamp,
+    timestampEnd: Timestamp,
+    exercises: Array<Exercise>
+  ) {
+    this.name = name;
+    this.timestampStart = timestampStart;
+    this.timestampEnd = timestampEnd;
+    this.exercises = exercises;
+  }
+}
+
+export class Exercise {
+  name: string;
+  repetition: number;
+  sets: number;
+
+  constructor(name: string, repetition: number, sets: number) {
+    this.name = name;
+    this.repetition = repetition;
+    this.sets = sets;
+  }
+}
+
 function MainFeed() {
+
   class ImagePost {
     id: string;
     type: string;
@@ -71,41 +103,6 @@ function MainFeed() {
     }
   }
 
-  class Workout {
-    name: string;
-    timestampStart: Timestamp;
-    timestampEnd: Timestamp;
-    exercises: Array<Exercise>;
-
-    constructor(
-      name: string,
-      timestampStart: Timestamp,
-      timestampEnd: Timestamp,
-      exercises: Array<Exercise>,
-    ) {
-      this.name = name;
-      this.timestampStart = timestampStart;
-      this.timestampEnd = timestampEnd;
-      this.exercises = exercises;
-    }
-  }
-
-  class Exercise {
-    name: string;
-    repetition: number;
-    sets: number;
-
-    constructor(
-      name: string,
-      repetition: number,
-      sets: number,
-    ) {
-      this.name = name;
-      this.repetition = repetition;
-      this.sets = sets;
-    }
-  }
-
   type CombinedPost = ImagePost | WorkoutPost;
 
   let imagePosts: ImagePost[];
@@ -119,6 +116,11 @@ function MainFeed() {
 
   useEffect(() => {
     if (session) {
+      combinedArray = [];
+      imagePosts = [];
+      workoutPosts = [];
+      setCombinedPosts(combinedArray);
+      console.log(combinedPosts);
       allPosts();
     }
   }, [session]);
@@ -162,6 +164,7 @@ function MainFeed() {
   };
 
   const findImagePosts = async (friends: { username: string }[]) => {
+    imagePosts = [];
     for (const { username } of friends) {
       const docRef = doc(db, "users", username);
       const docSnap = await getDoc(docRef);
@@ -182,11 +185,17 @@ function MainFeed() {
         );
       });
       imagePosts.forEach((post) => {
-        combinedArray.push(post);
+        if (post.id in combinedArray) {
+          console.log("hello");
+        } else {
+          combinedArray.push(post);
+        }
       });
     }
   };
+
   const findWorkoutPosts = async (friends: { username: string }[]) => {
+    workoutPosts = [];
     for (const { username } of friends) {
       const docRef = doc(db, "users", username);
       const docSnap = await getDoc(docRef);
@@ -196,7 +205,7 @@ function MainFeed() {
       const querySnapshot = await getDocs(postQuery);
       workoutPosts = querySnapshot.docs.map((doc) => {
         const data = doc.data();
-        let ex = new Exercise("navnøvelse", 4, 3); 
+        let ex = new Exercise("navnøvelse", 4, 3);
         return new WorkoutPost(
           doc.id,
           "workoutPost",
@@ -207,14 +216,18 @@ function MainFeed() {
         );
       });
       workoutPosts.forEach((post) => {
-        combinedArray.push(post);
+        if (post.id in combinedArray) {
+          console.log("hello");
+        } else {
+          combinedArray.push(post);
+        }
       });
     }
   };
 
   async function allPosts() {
+    combinedArray = [];
     await findUser();
-    console.log(combinedArray);
     combinedArray.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
     setCombinedPosts(combinedArray);
   }
