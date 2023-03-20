@@ -26,7 +26,7 @@ const Friends: NextPage = () => {
   const activeUserRef = doc(db, 'activeUsers', "1");
   const AllUsersRef = collection(db, "users");
   
-  const [users, setusers] = useState({});
+  const [users, setusers] = useState<User[]>([]);
 
   useEffect(() => {
     FriendsOfactiveUser();
@@ -42,7 +42,7 @@ const Friends: NextPage = () => {
 
     const FriendsOfActiveUserDocs = await getDocs(FriendsOfActiveUserRef).then((snapshot) => {
 
-      friends = snapshot.docs.map(doc => doc.data())
+      friends = snapshot.docs.map(doc => doc.data().username)
 
     })
     console.log(friends)
@@ -54,8 +54,8 @@ const Friends: NextPage = () => {
       friendsobj = snapshot.docs.map(doc => doc.data())
       console.log(friendsobj)
     })
+
     console.log(friendsobj)
-    console.log(FriendsOfActiveUserQuery)
 
 
     onSnapshot(FriendsOfActiveUserQuery, (snapshot) => {
@@ -80,14 +80,15 @@ const Friends: NextPage = () => {
       <p className="font-light" style={{ marginTop: "30px" }}>
         Your friends:
       </p>
-      {friendsobj.map((user: User) => (
+      {users.map((user: any) => (
         console.log("hei"),
+        console.log(user),
         <Friend
           key={user.userID}
           userID={user.userID}
-          name={user.name}
-          userName={user.userID}
-          img={user.img}
+          name={user.username}
+          userName={user.username}
+          img={user.picture}
         />
       ))}
     </div>

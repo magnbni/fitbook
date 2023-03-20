@@ -1,5 +1,7 @@
 "use client";
+import { collection, deleteDoc, doc, getDoc, query, where } from "firebase/firestore";
 import React from "react";
+import { db } from "../../firebase";
 
 export type User = {
   userID: string
@@ -8,9 +10,25 @@ export type User = {
   img: string;
 };
 
-const Friend = ({ name, userName, img }: User) => {
-  const onClick = () => {
-    alert(`@${userName} is no longer your friend.`);
+
+
+const Friend = ({ name, userName, img, userID }: User) => {
+
+  const activeUserRef = doc(db, 'activeUsers', "1");
+  
+  const onClick = async() => {
+
+    const docSnap = await getDoc(activeUserRef);
+    await deleteDoc(doc(db,"users",docSnap.get("username"), "friends", userName)).then(()=>{
+      alert(`@${userName} is no longer your friend.`);
+
+    }).catch((error)=>{
+      alert(error.message);
+
+    })
+
+
+
   };
 
   return (
