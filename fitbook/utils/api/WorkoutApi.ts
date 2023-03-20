@@ -94,9 +94,19 @@ export const WorkoutApi = {
 
       const workoutDocRef = doc(userDocRef, "workouts", workoutID )
       const weekColRef = collection(workoutDocRef, "weeks");
-      const weekDocRef = await addDoc(weekColRef, emptyWeek)
+      const weekQuerySnapshot = await getDocs(weekColRef);
+      let highestWeekId = 0;
+      weekQuerySnapshot.forEach((doc) => {
+        const weekId = parseInt(doc.id);
+        if (weekId > highestWeekId) {
+          highestWeekId = weekId;
+        }
+      });
 
-      return weekDocRef.id
+       const newWeekId = (highestWeekId + 1).toString();
+      const newWeekRef = doc(weekColRef, newWeekId);
+      await setDoc(newWeekRef, emptyWeek);
+      return newWeekRef.id
     } else {
       return null
     }
@@ -112,8 +122,7 @@ export const WorkoutApi = {
     if (userDocSnap.exists()) {
 
       const workoutDocRef = doc(userDocRef, "workouts", workoutID )
-      const weekColRef = collection(workoutDocRef, "weeks");
-      const weekDocRef = await deleteDoc(doc(weekColRef, "weeks", weekID))
+      const weekDocRef = await deleteDoc(doc(workoutDocRef, "weeks", weekID))
     }
     
     

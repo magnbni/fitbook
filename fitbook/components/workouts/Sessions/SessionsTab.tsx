@@ -1,15 +1,16 @@
 import { DocumentData, DocumentReference } from "firebase/firestore";
 import { useState } from "react";
 import { SessionDto } from "../../../types/workouts";
+import SessionChange from "./SessionChange";
 import SessionsCard from "./SessionsCard";
 
 type Props = {
   sessions: Record<string, SessionDto>;
-  Open: () => void;
-  setID: (value: string) => void;
 };
 
-function SessionsTab({ sessions, setID, Open }: Props) {
+function SessionsTab({ sessions }: Props) {
+  const [open, setOpen] = useState(false);
+  const [id, setID] = useState("");
   const [query, setQuery] = useState("");
   const [queryList, setQueryList] =
     useState<Record<string, SessionDto>>(sessions);
@@ -39,7 +40,7 @@ function SessionsTab({ sessions, setID, Open }: Props) {
         </fieldset>
 
         <button
-          onClick={() => Open()}
+          onClick={() => setOpen(true)}
           className="p-1 border-2 rounded border-primary text-primary "
         >
           Add New
@@ -50,7 +51,7 @@ function SessionsTab({ sessions, setID, Open }: Props) {
           {Object.keys(queryList).map((key) => (
             <SessionsCard
               id={key}
-              Open={Open}
+              setOpen={setOpen}
               setID={setID}
               key={key}
               name={queryList[key].name}
@@ -59,6 +60,14 @@ function SessionsTab({ sessions, setID, Open }: Props) {
           ))}
         </div>
       </div>
+
+      {open && (
+        <SessionChange
+          setOpen={setOpen}
+          session={sessions[id]}
+          sessions={sessions}
+        />
+      )}
     </>
   );
 }

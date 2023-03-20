@@ -4,16 +4,16 @@ type Props = {
   id: string;
   name: string;
   img: string;
-  Open: () => void;
+  setOpen: (value: boolean) => void;
   setID: (value: string) => void;
 };
 
-function SessionsCard({ id, img, name, setID, Open }: Props) {
+function SessionsCard({ id, setID, img, name, setOpen }: Props) {
   return (
     <button
       onClick={() => {
+        setOpen(true);
         setID(id);
-        Open();
       }}
       className="relative flex-wrap w-full border-2"
     >

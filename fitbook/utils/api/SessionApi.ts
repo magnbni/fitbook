@@ -2,7 +2,7 @@ import { addDoc, collection, doc, getDoc, getDocs, setDoc, updateDoc } from "fir
 import { db } from "../../firebase";
 
 
-import {  SessionDto} from "../../types/workouts"
+import {  ExcersiseDto, SessionDto} from "../../types/workouts"
 
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday" ,"Friday", "Saturday", "Sunday"];
@@ -24,9 +24,10 @@ export const SessionApi = {
         try {
           const data = doc.data();
           const session: SessionDto = {
+            sessionID: doc.id,
             name: data.name,
             img: data.img,
-            excersise: []
+            excersise: {}
           }
 
           const excersiseRef = collection(doc.ref, "excersise");
@@ -39,7 +40,8 @@ export const SessionApi = {
               name: excersiseData.name,
               reps: excersiseData.reps,
             }
-            session.excersise.push(excersise)
+
+            session.excersise[excersiseDoc.id] = excersise
           
           }
 
@@ -78,12 +80,12 @@ export const SessionApi = {
     
   },
 
-  addExcersise: async function(username: string, session: string, name: string , reps: number) { 
+  addExcersise: async function(username: string, session: string, name: string , reps: string) { 
 
     const userDocRef = doc(db, "users", username);
     const userDocSnap = await getDoc(userDocRef);
 
-    const ovelse = {
+    const ovelse: ExcersiseDto= {
       name: name,
       reps: reps,
     }
@@ -93,7 +95,7 @@ export const SessionApi = {
       const excersiseColRef = collection(sessionsDocRef, "excersise")
       const newExcersise = await addDoc(excersiseColRef, ovelse)
     
-      
+      return newExcersise.id
     }
   }
 

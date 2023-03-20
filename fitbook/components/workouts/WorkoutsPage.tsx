@@ -19,9 +19,6 @@ type Props = {
 };
 
 function WorkoutsPage({ setID, setOpen, setTab, tab }: Props) {
-  function Open() {
-    setOpen(tab + 1);
-  }
   const name = "Endre";
   const [workouts, setWorkouts] = useState<WorkoutDto[]>([]);
   const [sessions, setSessions] = useState<Record<string, SessionDto>>({});
@@ -78,9 +75,7 @@ function WorkoutsPage({ setID, setOpen, setTab, tab }: Props) {
             <WorkoutsTab workouts={workouts} sessions={sessions} />
           ))}
 
-        {tab === 1 && (
-          <SessionsTab sessions={sessions} Open={Open} setID={setID} />
-        )}
+        {tab === 1 && <SessionsTab sessions={sessions} />}
       </div>
     </>
   );

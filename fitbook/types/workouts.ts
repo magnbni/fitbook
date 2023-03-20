@@ -3,14 +3,15 @@ import { DocumentData, Timestamp } from "firebase/firestore";
 
 export type ExcersiseDto = {
     name: string,
-    reps: number,
+    reps: string,
 }
 
 
 export type SessionDto = {
+    sessionID: string,
     name: string,
     img: string,
-    excersise: ExcersiseDto[]
+    excersise: Record<string,ExcersiseDto>
 }
 
 

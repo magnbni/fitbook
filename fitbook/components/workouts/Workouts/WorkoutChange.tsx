@@ -40,7 +40,9 @@ function WorkoutChange({ workout, sessions, setOpen }: Props) {
   ];
 
   const handleDeleteWeek = (key: string) => {
-    console.log(key);
+    WorkoutApi.deleteWeek(workout.ownerId, workout.workoutId, key);
+    delete workout.weeks[key];
+    setWeek(Object.keys(workout.weeks)[0]);
   };
 
   const addWeek = () => {
@@ -118,7 +120,7 @@ function WorkoutChange({ workout, sessions, setOpen }: Props) {
             <div className="flex items-center justify-between w-full p-2 border-b-2 border-primary ">
               <p>{workout.name}</p>
 
-              <p>Week: {week + 1}</p>
+              <p>Week </p>
 
               <div className="p-1 rounded-full hover:bg-opacity-10 hover:bg-primary hover:scale-110">
                 <XMarkIcon
@@ -130,27 +132,22 @@ function WorkoutChange({ workout, sessions, setOpen }: Props) {
             <div className="flex w-full h-5/6">
               <div className="flex flex-col pr-2 overflow-y-scroll border-r-2 min-w-fit overflow-x-clip">
                 {Object.keys(workout.weeks).map((key, index) => (
-                  <>
-                    <button
-                      key={key}
-                      className={`flex m-1 border-gray border-2 p-1 rounded  w-full ${
-                        key == week ? "border-primary " : ""
-                      } `}
-                      onClick={() => setWeek(key)}
-                    >
+                  <div
+                    key={key}
+                    className={`flex m-1 border-gray border-2 p-1 rounded  w-full ${
+                      key == week ? "border-primary " : ""
+                    } `}
+                  >
+                    <button key={key} onClick={() => setWeek(key)}>
                       Week {index + 1}
                     </button>
-                    <TrashIcon
-                      onClick={() =>
-                        WorkoutApi.deleteWeek(
-                          workout.ownerId,
-                          workout.workoutId,
-                          key
-                        )
-                      }
-                      className={"h-5 w-5 cursor-pointer "}
-                    />
-                  </>
+                    {key == week && (
+                      <TrashIcon
+                        onClick={() => handleDeleteWeek(key)}
+                        className={"h-5 w-5 cursor-pointer "}
+                      />
+                    )}
+                  </div>
                 ))}
                 <button
                   onClick={() => addWeek()}
