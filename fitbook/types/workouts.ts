@@ -1,32 +1,30 @@
-import { DocumentData } from "firebase/firestore";
+import { DocumentData, Timestamp } from "firebase/firestore";
 
 
-
+export type ExcersiseDto = {
+    name: string,
+    reps: number,
+}
 
 
 export type SessionDto = {
     name: string,
-    start: number,
-    end: number,
+    img: string,
+    excersise: ExcersiseDto[]
 }
 
 
-type DayOfWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+
 export type WeekDto = {
-    [day: string]: SessionDto[],
-    monday: SessionDto[],
-    tuesday: SessionDto[],
-    wednesday: SessionDto[],
-    thursday: SessionDto[],
-    friday: SessionDto[],
-    saturday: SessionDto[],
-    sunday: SessionDto[],
+    [key: string]: {start: string, end: string, sessionID: string}[];
+   
 }
 
 export type WorkoutDto = {
+    workoutId: string;
     ownerId: string;
     name: string;
     img: string;
-    weeks: Array<WeekDto>;
+    weeks: Record<string,WeekDto>;
 
 }

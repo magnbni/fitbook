@@ -4,28 +4,28 @@ import { SessionDto } from "../../../types/workouts";
 import SessionsCard from "./SessionsCard";
 
 type Props = {
-  data: SessionDto[];
+  sessions: Record<string, SessionDto>;
   Open: () => void;
-  setIndex: (value: number) => void;
+  setID: (value: string) => void;
 };
 
-function SessionsTab({ data, setIndex, Open }: Props) {
+function SessionsTab({ sessions, setID, Open }: Props) {
   const [query, setQuery] = useState("");
-  const [queryList, setQueryList] = useState<SessionDto[]>(data);
+  const [queryList, setQueryList] =
+    useState<Record<string, SessionDto>>(sessions);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
-    const results = data.filter((session) => {
-      if (event.target.value === "") {
-        return data;
-      }
-      return session.name
-        .toLowerCase()
-        .includes(event.target.value.toLowerCase());
+    const results: Record<string, SessionDto> = {};
+
+    Object.keys(sessions).forEach((key) => {
+      const session = sessions[key];
+      results[key] = session;
     });
 
     setQueryList(results);
   };
+
   return (
     <>
       <div className="flex justify-between p-2 m-2 border-b-2 border-primary">
@@ -46,24 +46,18 @@ function SessionsTab({ data, setIndex, Open }: Props) {
         </button>
       </div>
       <div>
-        {!queryList.length ? (
-          <div className="flex flex-col justify-center w-full text-4xl text-center h-80">
-            No results for your search
-          </div>
-        ) : (
-          <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
-            {queryList.map((session, index) => (
-              <SessionsCard
-                Open={Open}
-                setIndex={setIndex}
-                key={index}
-                name={session.name}
-                index={index}
-                img={"/session.jpg"}
-              />
-            ))}
-          </div>
-        )}
+        <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
+          {Object.keys(queryList).map((key) => (
+            <SessionsCard
+              id={key}
+              Open={Open}
+              setID={setID}
+              key={key}
+              name={queryList[key].name}
+              img={"/session.jpg"}
+            />
+          ))}
+        </div>
       </div>
     </>
   );

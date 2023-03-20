@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, DocumentData, DocumentReference, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, getDoc, getDocs, setDoc, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 
@@ -6,7 +6,15 @@ import { WorkoutDto , WeekDto, SessionDto} from "../../types/workouts"
 
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday" ,"Friday", "Saturday", "Sunday"];
-
+const emptyWeek: WeekDto = {
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: [],
+    saturday: [],
+    sunday: []
+  }
 
 export const WorkoutApi = {
 
@@ -14,21 +22,7 @@ export const WorkoutApi = {
 
   getAllWorkouts: async function (username: string): Promise<WorkoutDto[]> {
 
-    const getSession = async (weekDocRef: DocumentReference<DocumentData>, day: string) => {
-          const sessions: SessionDto[] = [];
-          const dayRef = collection(weekDocRef, day);
-          const dayQuerySnapshot = await getDocs(dayRef);
-          for (const sessionDoc of dayQuerySnapshot.docs) {
-            const sessionData = sessionDoc.data();
-            const session: SessionDto = {
-              name: sessionData.name,
-              start: sessionData.start,
-              end: sessionData.end,
-            };
-            sessions.push(session)
-          }
-          return sessions
-    }
+  
 
     const workouts: WorkoutDto[] = [];
     const userDocRef = doc(db, "users", username);
@@ -38,26 +32,29 @@ export const WorkoutApi = {
       try {
         const data = doc.data();
         const workout: WorkoutDto = {
-          ownerId: data.username,
+          workoutId: doc.id,
+          ownerId: data.ownerId,
           name: data.name,
           img: data.img,
-          weeks: []
+          weeks: {}
         }
         const weeksRef = collection(doc.ref, "weeks");
         const weeksQuerySnapshot = await getDocs(weeksRef);
         for (const weekDoc of weeksQuerySnapshot.docs) {
           const week: Record<string, any> = {}
          
-        
+          const weekData = weekDoc.data()
+          
+          week["monday"] = weekData.monday;
+          week["tuesday"] = weekData.tuesday;
+          week["wednesday"] = weekData.wednesday;
+          week["thursday"] = weekData.thursday;
+          week["friday"] = weekData.friday;
+          week["saturday"] = weekData.saturday;
+          week["sunday"] = weekData.sunday;
 
-          for (const day of days) {
-            getSession(weekDoc.ref,day).then((res) => {
-              week[day.toLowerCase()]=res
-            }).catch((err) => console.log(err))
-          }
-          console.log(week)
 
-          workout.weeks.push(week as WeekDto);
+          workout.weeks[weekDoc.id] = (week as WeekDto);
         }
         workouts.push(workout);
       } catch (error) {
@@ -66,18 +63,11 @@ export const WorkoutApi = {
     }
     return workouts;
   },
-  addWorkout: async function(username: string, name: string, img?: "string" ) {
+
+  addWorkout: async function(username: string, name: string, img?: string ) {
     
     let image = img ?? "/workout.jpg";
-    const emptyWeek: WeekDto = {
-      monday: [],
-      tuesday: [],
-      wednesday: [],
-      thursday: [],
-      friday: [],
-      saturday: [],
-      sunday: []
-    }
+ 
     const emptyWorkout = {
       ownerId: username,
       name: name,
@@ -94,49 +84,57 @@ export const WorkoutApi = {
     }
     
   },
-  getAllSessions: async function (username: string): Promise<SessionDto[]> {
-    const getSession = async (weekDocRef: DocumentReference<DocumentData>, day: string) => {
-          const sessionsInDay: SessionDto[] = [];
-          const dayRef = collection(weekDocRef, day);
-          
-          const dayQuerySnapshot = await getDocs(dayRef);
-          for (const dayDoc of dayQuerySnapshot.docs) {
-            const dayData = dayDoc.data();
-            if (dayData.name && dayData.start && dayData.end) {
-              const session: SessionDto = {
-                name: dayData.name,
-                start: dayData.start,
-                end: dayData.end,
-              };
-              sessions.push(session);
-            }
-          }
-      return sessionsInDay;
-    } 
 
-    let sessions: SessionDto[] = [];
+  addWeek:  async function(username: string, workoutID:  string): Promise<string | null> {
+    console.log(username," - ", workoutID)
     const userDocRef = doc(db, "users", username);
-    const workoutColRef = collection(userDocRef, "workouts");
-    const querySnapshot = await getDocs(workoutColRef);
-    for (const doc of querySnapshot.docs) {
-      try { 
-        const weeksRef = collection(doc.ref, "weeks");
-        const weeksQuerySnapshot = await getDocs(weeksRef);
-        for (const weekDoc of weeksQuerySnapshot.docs) {
-          
-          for (const day of days) {
-            getSession(weekDoc.ref,day).then( (res) => {
-              sessions = [...sessions, ...res];
-              }).catch((err) => console.log(err))
-          }      
-          
-        }
-      } catch (error) {
-        console.error(error);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+
+      const workoutDocRef = doc(userDocRef, "workouts", workoutID )
+      const weekColRef = collection(workoutDocRef, "weeks");
+      const weekDocRef = await addDoc(weekColRef, emptyWeek)
+
+      return weekDocRef.id
+    } else {
+      return null
+    }
+    
+    
+  },
+
+   deleteWeek:  async function(username: string, workoutID:  string, weekID: string,){
+    console.log(username," - ", workoutID)
+    const userDocRef = doc(db, "users", username);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+
+      const workoutDocRef = doc(userDocRef, "workouts", workoutID )
+      const weekColRef = collection(workoutDocRef, "weeks");
+      const weekDocRef = await deleteDoc(doc(weekColRef, "weeks", weekID))
+    }
+    
+    
+  },
+
+  addSessionToWorkout:  async function(username: string, workoutID: string, sesssionID: string, weekID: string, day: string , start: string, end: string) { 
+    const userDocRef = doc(db, "users", username);
+    const userDocSnap = await getDoc(userDocRef);
+    if (userDocSnap.exists()) {
+      const workoutDocRef = doc(userDocRef, "workouts", workoutID)
+      const weekDocRef = doc(workoutDocRef, "weeks", weekID); 
+
+      const weekDocSnap = await getDoc(weekDocRef);
+      if (weekDocSnap.exists()) {
+        const weekData = weekDocSnap.data();
+        const dayArray = weekData[day] || []; 
+        const updatedDayArray = [...dayArray, {start, end, sesssionID}]; 
+        await updateDoc(weekDocRef, { [day]: updatedDayArray });
       }
     }
-    return sessions;
-  }
-
+  },
+  
 
 };

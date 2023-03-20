@@ -5,35 +5,26 @@ import { useCallback, useEffect, useState } from "react";
 import { SessionDto, WorkoutDto } from "../../types/workouts";
 import { UserApi } from "../../utils/api/UserApi";
 import { WorkoutApi } from "../../utils/api/WorkoutApi";
+import { SessionApi } from "../../utils/api/SessionApi";
 import ActiveWorkout from "./ActiveWorkout";
 
 import SessionsTab from "./Sessions/SessionsTab";
 import WorkoutsTab from "./Workouts/WorkoutsTab";
 
-type Workout = {
-  name: String;
-  img: string;
-};
-
-type Session = {
-  name: String;
-  img: string;
-};
-
 type Props = {
   tab: number;
   setOpen: (value: number) => void;
   setTab: (value: number) => void;
-  setIndex: (value: number) => void;
+  setID: (value: string) => void;
 };
 
-function WorkoutsPage({ setIndex, setOpen, setTab, tab }: Props) {
+function WorkoutsPage({ setID, setOpen, setTab, tab }: Props) {
   function Open() {
     setOpen(tab + 1);
   }
   const name = "Endre";
   const [workouts, setWorkouts] = useState<WorkoutDto[]>([]);
-  const [sessions, setSessions] = useState<SessionDto[]>([]);
+  const [sessions, setSessions] = useState<Record<string, SessionDto>>({});
 
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
@@ -42,7 +33,7 @@ function WorkoutsPage({ setIndex, setOpen, setTab, tab }: Props) {
     const workouts = WorkoutApi.getAllWorkouts(name);
     workouts.then((res) => setWorkouts(res));
 
-    const sessions = WorkoutApi.getAllSessions(name);
+    const sessions = SessionApi.getAllSessions(name);
     sessions.then((res) => setSessions(res));
   }, []);
 
@@ -53,6 +44,10 @@ function WorkoutsPage({ setIndex, setOpen, setTab, tab }: Props) {
       setLoading(false);
     }
   }, [workouts]);
+
+  useEffect(() => {
+    console.log("Sessions state has changed:", sessions);
+  }, [sessions]);
 
   const marked = "w-1/2 p-2 text-center font-bold bg-primary text-white";
   const notMarked =
@@ -77,10 +72,14 @@ function WorkoutsPage({ setIndex, setOpen, setTab, tab }: Props) {
           </button>
         </div>
         {tab === 0 &&
-          (loading ? <p>Loading...</p> : <WorkoutsTab workouts={workouts} />)}
+          (loading ? (
+            <p>Loading...</p>
+          ) : (
+            <WorkoutsTab workouts={workouts} sessions={sessions} />
+          ))}
 
         {tab === 1 && (
-          <SessionsTab data={sessions} Open={Open} setIndex={setIndex} />
+          <SessionsTab sessions={sessions} Open={Open} setID={setID} />
         )}
       </div>
     </>

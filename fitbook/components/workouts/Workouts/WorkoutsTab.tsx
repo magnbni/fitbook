@@ -8,7 +8,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { WorkoutDto } from "../../../types/workouts";
+import { SessionDto, WorkoutDto } from "../../../types/workouts";
 import { UserApi } from "../../../utils/api/UserApi";
 import { WorkoutApi } from "../../../utils/api/WorkoutApi";
 import WorkoutCard from "./WorkoutCard";
@@ -16,9 +16,10 @@ import WorkoutChange from "./WorkoutChange";
 
 type Props = {
   workouts: WorkoutDto[];
+  sessions: Record<string, SessionDto>;
 };
 
-function WorkoutsTab({ workouts }: Props) {
+function WorkoutsTab({ workouts, sessions }: Props) {
   const [open, Open] = useState(false);
   const [index, setIndex] = useState(0);
 
@@ -85,6 +86,7 @@ function WorkoutsTab({ workouts }: Props) {
         <WorkoutChange
           setOpen={setOpen}
           workout={workouts[index]}
+          sessions={sessions}
           index={index}
         />
       )}
