@@ -8,6 +8,7 @@ import { signOut } from "next-auth/react";
 import { useState } from "react";
 import React from "react";
 import UserFeed from "../../components/feed/UserFeed";
+import { UserApi } from "../../utils/api/UserApi";
 
 const Profile: NextPage = () => {
   const [imgsrc, setImgsrc] = useState(
@@ -17,11 +18,9 @@ const Profile: NextPage = () => {
   const [namesrc, setName] = useState("");
 
   const generateImage = async () => {
-    let docRef = doc(db, "activeUsers", "1");
-    let docSnap = await getDoc(docRef);
-    const username = docSnap.get("username");
-    docRef = doc(db, "users", username);
-    docSnap = await getDoc(docRef);
+    const username = await UserApi.getUserName();
+    const docRef = doc(db, "users", username);
+    const docSnap = await getDoc(docRef);
     if (docSnap.exists() && docSnap.exists()) {
       const pictureInDatabase = docSnap.get("picture");
       setImgsrc(pictureInDatabase);
@@ -31,15 +30,12 @@ const Profile: NextPage = () => {
   };
 
   const username = async () => {
-    const docRefActive = doc(db, "activeUsers", "1");
-
-    const docSnapActive = await getDoc(docRefActive);
-    const username = docSnapActive.get("username");
+    const username = await UserApi.getUserName();
 
     const docRef = doc(db, "users", username);
     const docSnap = await getDoc(docRef);
 
-    if (docSnapActive.exists() && docSnap.exists()) {
+    if (docSnap.exists()) {
       const username = docSnap.get("username");
       setUsernamesrc(String(username).toUpperCase());
       setName("@" + username);

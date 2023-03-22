@@ -1,8 +1,10 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { signOut, useSession } from "next-auth/react";
 
 
 import {  ExcersiseDto, SessionDto} from "../../types/workouts"
+import { UserApi } from "./UserApi";
 
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday" ,"Friday", "Saturday", "Sunday"];
@@ -112,6 +114,20 @@ export const SessionApi = {
       const sessionsDocRef = await deleteDoc(doc(userDocRef, "sessions", sessionID))
     }
 
+  },
+
+  handleShare: async function (id: String) {
+    const postText = async () => {
+      const username = await UserApi.getUserName();
+      const userDocRef = doc(db, "users", username);
+      const docData = {
+        sessionID: id,
+        timestamp: serverTimestamp(),
+      };
+  
+      const subcollectionRef = collection(userDocRef, "workoutPosts");
+      addDoc(subcollectionRef, postText)
+    };
   }
 
 

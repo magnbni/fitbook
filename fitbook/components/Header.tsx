@@ -5,6 +5,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
+import { UserApi } from "../utils/api/UserApi";
 import Logout from "./Logout";
 
 function Header() {
@@ -32,15 +33,12 @@ function Header() {
   };
 
   const username = async () => {
-    const docRefActive = doc(db, "activeUsers", "1");
-
-    const docSnapActive = await getDoc(docRefActive);
-    const username = docSnapActive.get("username");
+    const username = await UserApi.getUserName();
 
     const docRef = doc(db, "users", username);
     const docSnap = await getDoc(docRef);
 
-    if (docSnapActive.exists() && docSnap.exists()) {
+    if (docSnap.exists()) {
       const username = docSnap.get("username");
       setUsernamesrc(username);
     } else {

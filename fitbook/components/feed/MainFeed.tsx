@@ -13,6 +13,7 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase";
+import { UserApi } from "../../utils/api/UserApi";
 import FitbookPostWithImage from "./FitbookPostWithImage";
 import FitbookPostWorkout from "./FitbookPostWorkout";
 import Post from "./Post";
@@ -49,7 +50,6 @@ export class Exercise {
 }
 
 function MainFeed() {
-
   class ImagePost {
     id: string;
     type: string;
@@ -126,21 +126,13 @@ function MainFeed() {
   }, [session]);
 
   const findUser = async () => {
-    const activeDocRef = doc(db, "activeUsers", "1");
-    const activeDocSnap = await getDoc(activeDocRef);
+    const username = await UserApi.getUserName();
 
-    if (!activeDocSnap.exists()) {
-      alert(`Database error`);
-      signOut();
-    } else {
-      const username = activeDocSnap.get("username");
+    const userDocRef = doc(db, "users", username);
+    const userDocSnap = await getDoc(userDocRef);
 
-      const userDocRef = doc(db, "users", username);
-      const userDocSnap = await getDoc(userDocRef);
-
-      if (userDocSnap.exists()) {
-        await findFriends(userDocRef);
-      }
+    if (userDocSnap.exists()) {
+      await findFriends(userDocRef);
     }
   };
 
@@ -204,31 +196,31 @@ function MainFeed() {
       const postQuery = query(postRef);
 
       const querySnapshot = await getDocs(postQuery);
+      const postedSession = querySnapshot.docs.map((doc) => {
+        return doc.data().id;
+      });
       const workoutPosts = querySnapshot.docs.map(async (doc) => {
         const data = doc.data();
-        const exercisesRef = collection(postRef, doc.id, "Exercises");
-        const exercisesSnapshot = await getDocs(exercisesRef);
-        const exercises = exercisesSnapshot.docs.map((exerciseDoc) =>{
-          return new Exercise(
-            data.name,
-            data.repetition,
-            data.sets
-          )
-        })      
-        console.log(data.workout)
-        return new WorkoutPost(
-          doc.id,
-          "workoutPost",
-          username,
-          docSnap.get("picture"),
-          new Workout(
-            data.name,
-            data.timestampStart,
-            data.timestampEnd,
-            exercises
-          ),
-          data.timestamp
-        );
+        if (data.id in postedSession) {
+          const exercisesRef = collection(postRef, doc.id, "Exercises");
+          const exercisesSnapshot = await getDocs(exercisesRef);
+          const exercises = exercisesSnapshot.docs.map((exerciseDoc) => {
+            return new Exercise(data.name, data.repetition, data.sets);
+          });
+          return new WorkoutPost(
+            doc.id,
+            "workoutPost",
+            username,
+            docSnap.get("picture"),
+            new Workout(
+              data.name,
+              data.timestampStart,
+              data.timestampEnd,
+              exercises
+            ),
+            data.timestamp
+          );
+        }
       });
     }
   };

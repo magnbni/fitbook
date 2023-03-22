@@ -10,25 +10,11 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { db } from "../../firebase";
+import { UserApi } from "../../utils/api/UserApi";
 
 function Post() {
-  const { data: session } = useSession();
-  const findUser = async () => {
-    if (session) {
-      const docRef = doc(db, "activeUsers", "1");
-      const docSnap = await getDoc(docRef);
-
-      if (!docSnap.exists()) {
-        alert(`Database error`);
-        signOut();
-      } else {
-        return docSnap.get("username");
-      }
-    }
-  };
-
   const postText = async () => {
-    const username = await findUser();
+    const username = await UserApi.getUserName();
     const userDocRef = doc(db, "users", username);
     const docData = {
       postText: text,
