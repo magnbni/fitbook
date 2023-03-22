@@ -8,7 +8,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { SessionDto, WorkoutDto } from "../../../types/workouts";
+import { SessionDto, WeekDto, WorkoutDto } from "../../../types/workouts";
 import { UserApi } from "../../../utils/api/UserApi";
 import { WorkoutApi } from "../../../utils/api/WorkoutApi";
 import WorkoutCard from "./WorkoutCard";
@@ -28,6 +28,42 @@ function WorkoutsTab({ workouts, sessions }: Props) {
 
   const setOpen = (bool: boolean) => {
     Open(bool);
+  };
+
+  const [newName, setNewName] = useState("");
+  const handleNewNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewName(event.target.value);
+  };
+
+  const handleCreateSession = () => {
+    console.log("creating workout");
+
+    WorkoutApi.addWorkout("Endre", newName).then((res) => {
+      if (res) {
+        const emptyWorkout: WorkoutDto = {
+          ownerId: "Endre",
+          name: newName,
+          img: res[1],
+          workoutId: res[0],
+          weeks: {},
+        };
+
+        emptyWorkout.weeks[res[3]] = {};
+
+        workouts.push(emptyWorkout);
+
+        const results = workouts.filter((workout) => {
+          if (query === "") {
+            return workout;
+          }
+          return workout.name.toLowerCase().includes(query.toLowerCase());
+        });
+
+        setQueryList(results);
+      } else {
+        console.log("Failed to create new Workout");
+      }
+    });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,16 +104,28 @@ function WorkoutsTab({ workouts, sessions }: Props) {
             type="text"
           />
         </fieldset>
-
-        <button
-          onClick={() => setOpen(true)}
-          className="p-1 border-2 rounded border-primary text-primary "
-        >
-          Add New
-        </button>
+        <div>
+          <input
+            placeholder="New session name"
+            onChange={handleNewNameChange}
+            className="p-2 mx-2 border-2 rounded border-primary "
+            type="text"
+          />
+          <button
+            onClick={() => handleCreateSession()}
+            className="p-2 border-2 rounded border-primary text-primary "
+          >
+            Add New
+          </button>
+        </div>
       </div>
       <div>
-        <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
+        <div
+          className={
+            `grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2` +
+            `${open ? " h-20 , overflow-hidden" : ""}`
+          }
+        >
           {workoutItems}
         </div>
       </div>

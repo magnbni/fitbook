@@ -46,7 +46,7 @@ function SessionChange({ session, sessions, setOpen }: Props) {
   const handleDeleteExcersise = () => {};
   return (
     <>
-      <div className={"fixed inset-0 z-40 w-screen h-screen"}>
+      <div className={"fixed inset-0 z-40 w-screen h-screen "}>
         <div
           className={
             "flex items-center  w-full h-full justify-center bg-opacity-60 bg-gray-400"
@@ -63,7 +63,7 @@ function SessionChange({ session, sessions, setOpen }: Props) {
                 />
               </div>
             </div>
-            <div className="p-1 border-b-2 border-primary">
+            <div className="p-1 overflow-scroll border-b-2 border-primary">
               {Object.values(excersiseArray).map((excersise, index) => {
                 return (
                   <div key={index} className="p-2 my-2 border-2">

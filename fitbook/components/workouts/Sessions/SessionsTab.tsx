@@ -22,7 +22,11 @@ function SessionsTab({ sessions }: Props) {
 
     Object.keys(sessions).forEach((key) => {
       const session = sessions[key];
-      results[key] = session;
+      if (event.target.value === "") {
+        results[key] = session;
+      } else if (session.name.toLowerCase().includes(query.toLowerCase())) {
+        results[key] = session;
+      }
     });
 
     setQueryList(results);
@@ -44,6 +48,7 @@ function SessionsTab({ sessions }: Props) {
           img: res[1],
           excersise: {},
         };
+
         sessions[res[0]] = emptySession;
 
         const results: Record<string, SessionDto> = {};
@@ -77,19 +82,24 @@ function SessionsTab({ sessions }: Props) {
           <input
             placeholder="New session name"
             onChange={handleNewNameChange}
-            className="px-1 mx-2 border-2 rounded border-primary "
+            className="p-2 mx-2 border-2 rounded border-primary "
             type="text"
           />
           <button
             onClick={() => handleCreateSession()}
-            className="p-1 border-2 rounded border-primary text-primary "
+            className="p-2 border-2 rounded border-primary text-primary "
           >
             Add New
           </button>
         </div>
       </div>
       <div>
-        <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
+        <div
+          className={
+            `grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2` +
+            `${open ? " h-60 , overflow-hidden" : ""}`
+          }
+        >
           {Object.keys(queryList).map((key) => (
             <SessionsCard
               id={key}
