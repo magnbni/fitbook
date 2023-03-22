@@ -1,6 +1,5 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-import { signOut, useSession } from "next-auth/react";
 
 
 import {  ExcersiseDto, SessionDto} from "../../types/workouts"
@@ -41,6 +40,7 @@ export const SessionApi = {
             const excersise = {
               name: excersiseData.name,
               reps: excersiseData.reps,
+              sets: excersiseData.sets,
             }
 
             session.excersise[excersiseDoc.id] = excersise
@@ -85,7 +85,7 @@ export const SessionApi = {
     
   },
 
-  addExcersise: async function(username: string, session: string, name: string , reps: string) { 
+  addExcersise: async function(username: string, session: string, name: string , reps: string, sets: string) { 
 
     const userDocRef = doc(db, "users", username);
     const userDocSnap = await getDoc(userDocRef);
@@ -93,6 +93,7 @@ export const SessionApi = {
     const ovelse: ExcersiseDto= {
       name: name,
       reps: reps,
+      sets: sets,
     }
 
     if (userDocSnap.exists()) {
@@ -116,7 +117,8 @@ export const SessionApi = {
 
   },
 
-  handleShare: async function (id: String) {
+  handleShareSession: async function (id: String) {
+    console.log("Test")
     const postText = async () => {
       const username = await UserApi.getUserName();
       const userDocRef = doc(db, "users", username);
