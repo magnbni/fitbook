@@ -1,102 +1,83 @@
-import { useState } from "react";
+import { async } from "@firebase/util";
+import { DocumentData, DocumentReference } from "firebase/firestore";
+import RenderResult from "next/dist/server/render-result";
+import { useCallback, useEffect, useState } from "react";
+import { SessionDto, WorkoutDto } from "../../types/workouts";
+import { UserApi } from "../../utils/api/UserApi";
+import { WorkoutApi } from "../../utils/api/WorkoutApi";
+import { SessionApi } from "../../utils/api/SessionApi";
 import ActiveWorkout from "./ActiveWorkout";
 
-import Display from "./Display";
-
-type Workout = {
-  name: String;
-  img: string;
-};
-
-type Session = {
-  name: String;
-  img: string;
-};
+import SessionsTab from "./Sessions/SessionsTab";
+import WorkoutsTab from "./Workouts/WorkoutsTab";
 
 type Props = {
   tab: number;
-  workoutsData: Array<Workout>;
-  sessionsData: Array<Session>;
   setOpen: (value: number) => void;
   setTab: (value: number) => void;
-  setIndex: (value: number) => void;
+  setID: (value: string) => void;
 };
 
-function WorkoutsPage({
-  sessionsData,
-  workoutsData,
-  setIndex,
-  setOpen,
-  setTab,
-  tab,
-}: Props) {
-  function handleCreateNew() {
-    setOpen(tab + 1);
-  }
+function WorkoutsPage({ setID, setOpen, setTab, tab }: Props) {
+  const name = "Endre";
+  const [workouts, setWorkouts] = useState<WorkoutDto[]>([]);
+  const [sessions, setSessions] = useState<Record<string, SessionDto>>({});
 
-  const tabs = [workoutsData, sessionsData];
+  const [loading, setLoading] = useState(true);
+  const [count, setCount] = useState(0);
 
-  function Open() {
-    setOpen(tab + 1);
-  }
+  useEffect(() => {
+    const workouts = WorkoutApi.getAllWorkouts(name);
+    workouts.then((res) => setWorkouts(res));
+
+    const sessions = SessionApi.getAllSessions(name);
+    sessions.then((res) => setSessions(res));
+  }, []);
+
+  useEffect(() => {
+    setCount(count + 1);
+    console.log("Workouts state has changed:", workouts, " - ", count);
+    if (workouts.length > 0) {
+      setLoading(false);
+    }
+  }, [workouts]);
+
+  useEffect(() => {
+    console.log("Sessions state has changed:", sessions);
+  }, [sessions]);
+
+  const marked = "w-1/2 p-2 text-center font-bold bg-primary text-white";
+  const notMarked =
+    "w-1/2 p-2 text-center  font-bold border-primary border-2 text-primary";
 
   return (
-    <div>
-      <div className="mb-4">
-        <ActiveWorkout />
-      </div>
-
+    <>
+      <div className="mb-4">Active Workout</div>
       <div className="flex flex-col w-full rounded shadow-lg">
         <div className="flex w-full rounded shadow-md">
           <button
-            className={`w-1/2 p-2 text-center rounded-tl ${
-              tab == 0
-                ? "bg-primary text-white"
-                : " border-primary border-2 text-primary"
-            } `}
+            className={`${tab == 0 ? marked : notMarked} `}
             onClick={() => setTab(0)}
           >
             Workouts
           </button>
           <button
-            className={`w-1/2 p-2 text-center rounded-tr ${
-              tab == 1
-                ? "bg-primary text-white"
-                : "border-primary border-2 text-primary"
-            } `}
+            className={` ${tab == 1 ? marked : notMarked} `}
             onClick={() => setTab(1)}
           >
             Sessions
           </button>
         </div>
-        <div className="flex">
-          <input className="w-2/4 m-2 border-2 border-black" type="text" />
-
-          <div className="flex w-2/4 m-1">
-            <button className="w-2/4 m-1 border-2 border-black">Search</button>
-
-            <button
-              onClick={() => Open()}
-              className="w-2/4 m-1 border-2 border-black"
-            >
-              Add New
-            </button>
-          </div>
-        </div>
-        <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
-          {tabs[tab].map((workout, index) => (
-            <Display
-              Open={Open}
-              setIndex={setIndex}
-              key={index}
-              name={workout.name}
-              index={index}
-              img={workout.img}
-            />
+        {tab === 0 &&
+          (loading ? (
+            <p>Loading...</p>
+          ) : (
+            <WorkoutsTab workouts={workouts} sessions={sessions} />
           ))}
-        </div>
+
+        {tab === 1 && <SessionsTab sessions={sessions} />}
       </div>
-    </div>
+    </>
   );
 }
 
