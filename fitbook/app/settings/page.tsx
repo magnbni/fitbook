@@ -9,11 +9,11 @@ import ChangeProfilePicture from "../../components/settings/ChangeProfilePicture
 
 const Settings: NextPage = () => {
   return (
-    <div className="flex items-center flex-col justify-center w-full p-3 bg-green-100 my-2 rounded text-black">
-      <div className="w-full flex flex-row-01">
-        <p className="text-center font-light w-full text-2xl">Settings</p>
+    <div className="flex flex-col items-center justify-center w-full p-3 my-2 text-black bg-green-100 rounded">
+      <div className="flex w-full flex-row-01">
+        <p className="w-full text-2xl font-light text-center">Settings</p>
       </div>
-      <div className="flex flex-row-02 p-5 w-full text-left">
+      <div className="flex w-full p-5 text-left flex-row-02">
         <p className="font-light">Darkmode:</p>
         <div className="ml-10">
           <ToggleSwitch
@@ -22,7 +22,7 @@ const Settings: NextPage = () => {
           />
         </div>
       </div>
-      <div className="flex flex-row-03 p-5 w-full text-left">
+      <div className="flex w-full p-5 text-left flex-row-03">
         <p className="font-light">Show group activity in feed:</p>
         <div className="ml-10">
           <ToggleSwitch
@@ -33,7 +33,7 @@ const Settings: NextPage = () => {
         </div>
       </div>
 
-      <div className="flex flex-row-04 p-5 w-full text-left">
+      <div className="flex w-full p-5 text-left flex-row-04">
         <p className="font-light">Show friends activity in feed:</p>
         <div className="ml-10">
           <ToggleSwitch
@@ -43,13 +43,13 @@ const Settings: NextPage = () => {
           />
         </div>
       </div>
-      <div className="flex flex-row-05 p-5">
+      <div className="flex p-5 flex-row-05">
         <ChangePassword />
       </div>
-      <div className="flex flex-row-05 p-5">
+      <div className="flex p-5 flex-row-05">
         <ChangeProfilePicture />
       </div>
-      <div className="flex flex-row-06 p-5">
+      <div className="flex p-5 flex-row-06">
         <DeleteUser />
       </div>
     </div>

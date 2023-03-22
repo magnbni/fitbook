@@ -3,7 +3,7 @@
 import { doc, getDoc } from "firebase/firestore";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import Logout from "./Logout";
 
@@ -12,6 +12,10 @@ function Header() {
     "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png"
   );
   const [usernamesrc, setUsernamesrc] = useState("");
+
+  useEffect(() => {
+    console.log("wow");
+  }, []);
 
   const generateImage = async () => {
     let docRef = doc(db, "activeUsers", "1");
