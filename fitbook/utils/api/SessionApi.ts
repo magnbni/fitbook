@@ -61,7 +61,7 @@ export const SessionApi = {
 
 
 
-  createSession: async function(username: string, name: string, img?: string ) {
+  createSession: async function(username: string, name: string, img?: string ): Promise<string[] | null> {
     
     let image = img ?? "/session.jpg";
 
@@ -75,8 +75,11 @@ export const SessionApi = {
     if (userDocSnap.exists()) {
       const sessionsColRef = collection(userDocRef, "sessions");
       const newWorkoutRef = await addDoc(sessionsColRef, emptySession)
-      
+      return [newWorkoutRef.id, image ]
+    } else {
+      return null
     }
+
     
   },
 

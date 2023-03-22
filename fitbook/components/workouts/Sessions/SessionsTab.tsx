@@ -1,6 +1,7 @@
 import { DocumentData, DocumentReference } from "firebase/firestore";
 import { useState } from "react";
-import { SessionDto } from "../../../types/workouts";
+import { ExcersiseDto, SessionDto } from "../../../types/workouts";
+import { SessionApi } from "../../../utils/api/SessionApi";
 import SessionChange from "./SessionChange";
 import SessionsCard from "./SessionsCard";
 
@@ -15,7 +16,7 @@ function SessionsTab({ sessions }: Props) {
   const [queryList, setQueryList] =
     useState<Record<string, SessionDto>>(sessions);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
     const results: Record<string, SessionDto> = {};
 
@@ -27,24 +28,65 @@ function SessionsTab({ sessions }: Props) {
     setQueryList(results);
   };
 
+  const [newName, setNewName] = useState("");
+  const handleNewNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewName(event.target.value);
+  };
+
+  const handleCreateSession = () => {
+    console.log("creating session");
+
+    SessionApi.createSession("Endre", newName).then((res) => {
+      if (res) {
+        const emptySession: SessionDto = {
+          sessionID: res[0],
+          name: newName,
+          img: res[1],
+          excersise: {},
+        };
+        sessions[res[0]] = emptySession;
+
+        const results: Record<string, SessionDto> = {};
+
+        Object.keys(sessions).forEach((key) => {
+          const session = sessions[key];
+          results[key] = session;
+        });
+
+        setQueryList(results);
+        setID(res[0]);
+        setOpen(true);
+      } else {
+        console.log("Failed to create new Session");
+      }
+    });
+  };
+
   return (
     <>
       <div className="flex justify-between p-2 m-2 border-b-2 border-primary">
         <fieldset className="flex flex-row">
           <input
             placeholder="Search"
-            onChange={handleChange}
+            onChange={handleSearchChange}
             className="px-1 border-2 rounded border-primary "
             type="text"
           />
         </fieldset>
-
-        <button
-          onClick={() => setOpen(true)}
-          className="p-1 border-2 rounded border-primary text-primary "
-        >
-          Add New
-        </button>
+        <div>
+          <input
+            placeholder="New session name"
+            onChange={handleNewNameChange}
+            className="px-1 mx-2 border-2 rounded border-primary "
+            type="text"
+          />
+          <button
+            onClick={() => handleCreateSession()}
+            className="p-1 border-2 rounded border-primary text-primary "
+          >
+            Add New
+          </button>
+        </div>
       </div>
       <div>
         <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
