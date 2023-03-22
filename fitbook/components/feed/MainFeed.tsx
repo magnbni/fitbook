@@ -200,27 +200,35 @@ function MainFeed() {
       const docRef = doc(db, "users", username);
       const docSnap = await getDoc(docRef);
       const postRef = collection(db, "users", username, "workoutPosts");
+
       const postQuery = query(postRef);
 
       const querySnapshot = await getDocs(postQuery);
-      workoutPosts = querySnapshot.docs.map((doc) => {
+      const workoutPosts = querySnapshot.docs.map(async (doc) => {
         const data = doc.data();
-        let ex = new Exercise("navnøvelse", 4, 3);
+        const exercisesRef = collection(postRef, doc.id, "Exercises");
+        const exercisesSnapshot = await getDocs(exercisesRef);
+        const exercises = exercisesSnapshot.docs.map((exerciseDoc) =>{
+          return new Exercise(
+            data.name,
+            data.repetition,
+            data.sets
+          )
+        })      
+        console.log(data.workout)
         return new WorkoutPost(
           doc.id,
           "workoutPost",
           username,
           docSnap.get("picture"),
-          new Workout("navn", Timestamp.now(), Timestamp.now(), [ex]),
+          new Workout(
+            data.name,
+            data.timestampStart,
+            data.timestampEnd,
+            exercises
+          ),
           data.timestamp
         );
-      });
-      workoutPosts.forEach((post) => {
-        if (post.id in combinedArray) {
-          console.log("hello");
-        } else {
-          combinedArray.push(post);
-        }
       });
     }
   };
