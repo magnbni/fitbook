@@ -77,12 +77,15 @@ function WorkoutChange({ workout, sessions, setOpen }: Props) {
         <div className="flex flex-col justify-center p-1 overflow-hidden whitespace-nowrap h-11/12 hover:overflow-auto hover:scrollbar-hide w-44">
           {Object.values(workout.weeks[week][day.toLowerCase()]).map(
             (session, index) => {
+              console.log(session);
+              console.log(session.sessionID);
               return (
                 <SessionDisplay
                   key={index}
                   start={session.start}
                   end={session.end}
-                  name={"hei"}
+                  name={sessions[session.sessionID].name}
+                  session={sessions[session.sessionID]}
                 />
               );
             }
