@@ -15,7 +15,8 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "react-time-picker": "^5.2.0",
-    "react-toastify": "^9.1.1"
+    "react-toastify": "^9.1.1",
+    "timepicker": "^1.14.0"
   },
   "devDependencies": {
     "@types/node": "18.11.3",
