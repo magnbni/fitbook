@@ -77,7 +77,12 @@ function WorkoutsTab({ workouts, sessions }: Props) {
         </button>
       </div>
       <div>
-        <div className="grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2">
+        <div
+          className={
+            `grid w-full gap-4 p-2 md:grid-col-3 sm:grid-cols-2` +
+            `${open ? " h-20 , overflow-hidden" : ""}`
+          }
+        >
           {workoutItems}
         </div>
       </div>
