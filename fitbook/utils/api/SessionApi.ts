@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 
@@ -100,6 +100,18 @@ export const SessionApi = {
     
       return newExcersise.id
     }
+  },
+
+  deleteSession: async function(username: string, sessionID:string) {
+
+
+    const userDocRef = doc(db, "users", username);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const sessionsDocRef = await deleteDoc(doc(userDocRef, "sessions", sessionID))
+    }
+
   }
 
 
