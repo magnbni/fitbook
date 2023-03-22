@@ -19,7 +19,7 @@ function WorkoutCard({ img, name, setIndex, setOpen, index }: Props) {
     >
       <Image src={img} alt={"google"} width={500} height={500} />
       <div className="absolute bottom-0 w-full p-2 text-left text-white bg-gray-500 bg-opacity-60">
-        {name} - {index}
+        {name}
       </div>
     </button>
   );

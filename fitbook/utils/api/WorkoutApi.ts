@@ -64,7 +64,7 @@ export const WorkoutApi = {
     return workouts;
   },
 
-  addWorkout: async function(username: string, name: string, img?: string ) {
+  addWorkout: async function(username: string, name: string, img?: string ): Promise<string[] | null> {
     
     let image = img ?? "/workout.jpg";
  
@@ -73,6 +73,8 @@ export const WorkoutApi = {
       name: name,
       img: image,
     }
+
+
     const userDocRef = doc(db, "users", username);
     const userDocSnap = await getDoc(userDocRef);
     if (userDocSnap.exists()) {
@@ -80,8 +82,16 @@ export const WorkoutApi = {
       const newWorkoutRef = await addDoc(workoutsColRef, emptyWorkout)
       const workoutDocRef = doc(userDocRef, "workouts", newWorkoutRef.id )
       const weekColRef = collection(workoutDocRef, "weeks");
-      await addDoc(weekColRef, emptyWeek)
+      const docRef = await addDoc(weekColRef, emptyWeek)
+
+      return [workoutDocRef.id, image,docRef.id]
+      
     }
+
+    else {
+      return null
+    }
+    
     
   },
 
