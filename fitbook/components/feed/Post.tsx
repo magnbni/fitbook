@@ -42,14 +42,6 @@ function Post() {
     <div className="flex flex-row w-full px-4 top-14 space-x-2 h-32">
       <div className="w-9/12 h-full">
         <input
-          value={text}
-          type="text"
-          className="text-black w-full border-2 h-4/5 pb-2"
-          placeholder="Write your post here"
-          id="text"
-          onChange={(e) => setText(e.target.value)}
-        ></input>
-        <input
           value={picture}
           type="picture"
           className="text-black w-full border-2 h-1/5"
@@ -57,13 +49,21 @@ function Post() {
           id="picture"
           onChange={(e) => setPicture(e.target.value)}
         ></input>
+        <input
+          value={text}
+          type="text"
+          className="text-black w-full border-2 h-4/5 pb-2"
+          placeholder="Write a comment here"
+          id="text"
+          onChange={(e) => setText(e.target.value)}
+        ></input>
       </div>
 
       <button
         className="flex items-center bg-white border-2 w-3/12 h-full text-center"
         onClick={() => postText()}
       >
-        <p className="pr-5 font-bold text-primary w-full text-center">Post</p>
+        <p className="pr-5 font-bold text-primary w-full text-center">Publish</p>
       </button>
     </div>
   );

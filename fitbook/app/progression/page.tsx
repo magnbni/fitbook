@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -10,6 +10,15 @@ import { Chart as ChartJS,
   Legend, } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { NextPage } from 'next';
+import Post from '../../components/feed/Post';
+import FitbookPost from '../../components/feed/FitbookPostWithImage';
+import FitbookImage from '../../components/feed/FitbookImage';
+import { Timestamp, collection, doc, getDoc, getDocs, query } from 'firebase/firestore';
+import { signOut, useSession } from 'next-auth/react';
+import { db } from '../../firebase';
+import { UserApi } from '../../utils/api/UserApi';
+
+
 
 ChartJS.register(
   CategoryScale,
@@ -20,6 +29,68 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+  class ImagePost {
+    id: string;
+    type: string;
+    username: string;
+    profilepic: string;
+    postText: string;
+    postPicture: string;
+    timestamp: Timestamp;
+
+    constructor(
+      id: string,
+      type: string,
+      username: string,
+      profilepic: string,
+      postText: string,
+      postPicture: string,
+      timestamp: Timestamp
+    ) {
+      this.id = id;
+      this.type = type;
+      this.username = username;
+      this.profilepic = profilepic;
+      this.postText = postText;
+      this.postPicture = postPicture;
+      this.timestamp = timestamp;
+    }
+  }
+
+let imagePosts: ImagePost[];  
+
+const findUser = async () => {
+  const username = await UserApi.getUserName();
+
+  const userDocRef = doc(db, "users", username);
+  const userDocSnap = await getDoc(userDocRef);
+  await findImagePosts(username);
+};
+
+const findImagePosts = async (username: string) => {
+  imagePosts = [];
+
+  const docRef = doc(db, "users", username);
+  const docSnap = await getDoc(docRef);
+  const postRef = collection(db, "users", username, "imagePosts");
+  const postQuery = query(postRef);
+
+  const querySnapshot = await getDocs(postQuery);
+  imagePosts = querySnapshot.docs.map((doc) => {
+    const data = doc.data();
+    return new ImagePost(
+      doc.id,
+      "imagePost",
+      username,
+      docSnap.get("picture"),
+      data.postText,
+      data.postPicture,
+      data.timestamp
+    );
+  });
+  console.log(imagePosts)
+};
 
 let options = {
   responsive: true,
@@ -104,34 +175,68 @@ let caloriesBurntData = {
 let data = weightData;
 
 const Progression: NextPage = () => {
+  const [load, setLoad] = useState(false)
   const [open1, setOpen1] = useState(false);
   const handleOpen1 = () => {
     setOpen1(!open1);
   }
+  const { data: session } = useSession();
+  useEffect(() => {
+    if (session) {
+      imagePosts = [];
+      findUser();
+      setLoad(true)
+    }
+  }, [session]);
 
   const handleWeight = () => {
     // filter for weight and close drop-down
     data = weightData;
     setOpen1(false);
+    setGraphStyle({display: 'block'})
+    setPostStyle({display:'none'})
+    setPictureStyle({display:'none'})
   };
 
   const handle100m = () => {
     data = run100Data;
     setOpen1(false);
+    setGraphStyle({display: 'block'})
+    setPostStyle({display:'none'})
+    setPictureStyle({display:'none'})
   }
 
   const handleMaxBench = () => {
     data = maxBenchData;
     setOpen1(false);
+    setGraphStyle({display: 'block'})
+    setPostStyle({display:'none'})
+    setPictureStyle({display:'none'})
   }
 
   const handleCaloriesBurnt = () => {
     data = caloriesBurntData;
     setOpen1(false);
+    setGraphStyle({display: 'block'})
+    setPostStyle({display:'none'})
+    setPictureStyle({display:'none'})
   }
+  const handlePictures = () => {
+    findUser()
+    setGraphStyle({display: 'none'})
+    setPostStyle({display:'block'})
+    setPictureStyle({display:'block'})
+    setOpen1(false);
+  }
+
+  const [graphStyle, setGraphStyle] = useState({display: 'block'});
+  const [postStyle, setPostStyle] = useState({display: 'none'});
+  const [pictureStyle, setPictureStyle] = useState({display: 'none'});
+
   return (
     // Line Chart
     <div className="text-center w-full">
+      <div style={graphStyle}>
       <Line options={options} data={data} />
       {/* Buttons */}
       <div className="rounded-md shadow-md">
@@ -139,9 +244,11 @@ const Progression: NextPage = () => {
         <div className="flex flex-col items-center width-1/2 bg-white text-primary p-1 rounded-md border-black">
           <button className="font-bold rounded-md w-full h-full hover:bg-gray-100" onClick={handleRegisterWorkout}>Register Workout</button>
         </div>
+        </div>
+        </div>
         {/* Datafilter */}
         <div className="flex flex-col top-0.5 items-center width-1/2 bg-white text-primary p-1 rounded-md border-black">
-          <button className="font-bold rounded-md w-full h-full hover:bg-gray-100" onClick={handleOpen1}>Filter</button>
+          <button className="font-bold rounded-md w-full h-full hover:bg-gray-100" onClick={handleOpen1}>Menu</button>
           {open1 ? (
             <ul className="w-full h-full">
               <li className="rounded-md w-full h-full hover:bg-gray-100">
@@ -155,6 +262,9 @@ const Progression: NextPage = () => {
               </li>
               <li className="rounded-md w-full h-full hover:bg-gray-100">
                 <button className="w-full h-full" onClick={handleCaloriesBurnt}>Calories burnt</button>
+              </li>
+              <li className="rounded-md w-full h-full hover:bg-gray-100">
+                <button className="w-full h-full" onClick={handlePictures}>Pictures</button>
               </li>
             </ul>
           ) : null}
@@ -176,7 +286,14 @@ const Progression: NextPage = () => {
             </ul>
           ) : null}
         </div> */}
-      </div>
+      <div className="flex flex-col w-full pl-4 top-14 mt-8" style={postStyle}>
+    <Post/ >
+    </div>
+    {load && <div style={pictureStyle} className="flex flex-col w-full pl-4 top-14 mt-8">
+        {imagePosts.map((post) => {
+          return (<FitbookImage key={post.id} text={post.postText} username={post.username} imageUrl={post.postPicture} />)
+        })}
+    </div>}
     </div>
     
 
