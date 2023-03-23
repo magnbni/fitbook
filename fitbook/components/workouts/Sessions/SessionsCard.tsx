@@ -20,7 +20,6 @@ function SessionsCard({
   setOpen,
   deleteSession,
 }: Props) {
-  const handleShareSession = () => {};
   return (
     <div className={` relative `}>
       <div
@@ -38,21 +37,24 @@ function SessionsCard({
           setOpen(true);
           setID(id);
         }}
-        className="absolute bottom-0 flex items-center justify-between w-full h-8 px-2 text-left text-white bg-gray-500 bg-opacity-60"
+        className="z-30 absolute bottom-0 flex items-center justify-between w-fit h-8 px-2 text-left text-white bg-gray-500 bg-opacity-60"
       >
         {sessions[id].name}
-        <div
-          onClick={handleShareSession}
-          className="absolute px-2 text-sm rounded-full cursor-pointer right-2 h-fit bg-primary"
-        >
-          Share
-        </div>
       </div>
+      <div
+        onClick={() => {
+          SessionApi.handleShareSession(id);
+        }}
+        className="absolute z-40 px-2 text-sm rounded-full cursor-pointer bottom-1 right-2 h-fit bg-primary text-white"
+      >
+        Share
+      </div>
+
       <div
         onClick={() => {
           deleteSession(id);
         }}
-        className="absolute z-50 p-2 rounded-full cursor-pointer top-1 right-1 bg-primary"
+        className="absolute z-40 p-2 rounded-full cursor-pointer top-1 right-1 bg-primary"
       >
         <TrashIcon width={20} height={20} color="white" />
       </div>

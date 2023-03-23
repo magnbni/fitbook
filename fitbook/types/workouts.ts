@@ -4,6 +4,7 @@ import { DocumentData, Timestamp } from "firebase/firestore";
 export type ExcersiseDto = {
     name: string,
     reps: string,
+    sets: string
 }
 
 
