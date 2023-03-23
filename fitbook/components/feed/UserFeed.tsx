@@ -176,6 +176,13 @@ function MainFeed() {
         data.timestamp
       );
     });
+    workoutPosts.forEach((post) => {
+      if (post.id in combinedArray) {
+        console.log("hello");
+      } else {
+        combinedArray.push(post);
+      }
+    });
   };
 
   async function allPosts() {
@@ -187,7 +194,6 @@ function MainFeed() {
 
   return (
     <div className="flex flex-col w-full pl-4 top-14">
-      <Post />
       <div className="flex flex-col w-full pl-4 top-14">
         {combinedPosts.map((post) => {
           if (post.type === "imagePost") {
