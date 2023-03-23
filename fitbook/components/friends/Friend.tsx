@@ -1,15 +1,36 @@
 "use client";
+import { collection, deleteDoc, doc, getDoc, query, where } from "firebase/firestore";
 import React from "react";
+import { db } from "../../firebase";
 
-type Props = {
+export type User = {
+  userID: string
   name: string;
   userName: string;
   img: string;
 };
 
-const Friend = ({ name, userName, img }: Props) => {
-  const onClick = () => {
-    alert(`@${userName} is no longer your friend.`);
+
+
+const Friend = ({ name, userName, img, userID }: User) => {
+
+  const activeUserRef = doc(db, 'activeUsers', "1");
+  
+  const onClick = async() => {
+
+    const docSnap = await getDoc(activeUserRef);
+    await deleteDoc(doc(db,"users",docSnap.get("username"), "friends", userName)).then(()=>{
+      alert(`@${userName} is no longer your friend.`);
+      window.location.reload();
+
+
+    }).catch((error)=>{
+      alert(error.message);
+
+    })
+
+
+
   };
 
   return (
