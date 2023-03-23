@@ -6,20 +6,17 @@ import { Exercise } from "./MainFeed";
 type Props = {
   username: string;
   profilepic: string;
+  name: string;
   exercises: Exercise[];
 };
 
-const FitbookPost = ({ username, profilepic, exercises }: Props) => {
-  console.log("this is a workout post");
-  console.log(exercises);
+const FitbookPost = ({ username, profilepic, name, exercises }: Props) => {
   return (
     <div className="fitbook-post">
       <div className="post-header">
-        {/* <div className="profile-pic-container"> */}
         <div className="avatar">
           <img src={profilepic} alt="Profile picture" />
         </div>
-        {/* </div> */}
 
         <div className="imgSettings">
           <h2 className="username">{username}</h2>
@@ -40,6 +37,27 @@ const FitbookPost = ({ username, profilepic, exercises }: Props) => {
           </svg>
         </div>
       </div>
+      <div className="exercise-table w-full">
+        <table className="w-full table-auto">
+          <thead>
+            <tr>
+              <th className="px-4 py-2">Exercise Name</th>
+              <th className="px-4 py-2">Sets</th>
+              <th className="px-4 py-2">Reps</th>
+            </tr>
+          </thead>
+          <tbody>
+            {exercises.map((exercise, index) => (
+              <tr key={index}>
+                <td className="border px-4 py-2 text-center">{exercise.name}</td>
+                <td className="border px-4 py-2 text-center">{exercise.sets}</td>
+                <td className="border px-4 py-2 text-center">{exercise.reps}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       <div className="post-text">
         <div className="likeComment">
           <svg
@@ -75,7 +93,7 @@ const FitbookPost = ({ username, profilepic, exercises }: Props) => {
         </div>
         <hr />
         <p>
-          <b>{username}</b> {"exercises"}
+          <b>{username}</b> {name}
         </p>
       </div>
     </div>

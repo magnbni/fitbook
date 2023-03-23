@@ -171,20 +171,25 @@ function MainFeed() {
     workoutPosts = [];
     for (const { username } of friends) {
       const docRef = doc(db, "users", username);
-      const docSnap = await getDoc(docRef);
-      const postRef = collection(db, "users", username, "workoutPosts");
-      const postQuery = query(postRef);
+    const docSnap = await getDoc(docRef);
+    const postRef = collection(db, "users", username, "workoutPosts");
+    const postQuery = query(postRef);
 
-      const querySnapshot = await getDocs(postQuery);
-      workoutPosts = querySnapshot.docs.map((doc) => {
-        const data = doc.data();
-        const exercisesArray: Exercise[] = [];
-        data.exercises.forEach((element: Exercise) => {
+    const querySnapshot = await getDocs(postQuery);
+    workoutPosts = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      const exercisesArray: Exercise[] = [];
+      if (data.exercises) {
+        Object.keys(data.exercises).forEach((key: string) => {
           exercisesArray.push(
-            new Exercise(element.name, element.reps, element.sets)
+            new Exercise(
+              data.exercises[key].name,
+              data.exercises[key].reps,
+              data.exercises[key].sets
+            )
           );
         });
-
+      }
       return new WorkoutPost(
         doc.id,
         "workoutPost",
@@ -193,7 +198,14 @@ function MainFeed() {
         exercisesArray,
         data.timestamp
       );
-      });
+    });
+    workoutPosts.forEach((post) => {
+      if (post.id in combinedArray) {
+        console.log("hello");
+      } else {
+        combinedArray.push(post);
+      }
+    });
     }
   };
 
