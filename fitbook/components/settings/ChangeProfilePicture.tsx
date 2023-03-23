@@ -3,6 +3,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { signOut } from "next-auth/react";
 import React, { useState, useRef } from "react";
 import { db } from "../../firebase";
+import { UserApi } from "../../utils/api/UserApi";
 import Header from "../Header";
 
 const ChangeProfilePicture = () => {
@@ -11,18 +12,13 @@ const ChangeProfilePicture = () => {
   const changeProfilePicture = async () => {
     setClicked(!clicked);
     let pictureLink = inputRef.current.value;
-    console.log(pictureLink);
 
-    const docData = { pictureLink: pictureLink };
-    const docRefActive = doc(db, "activeUsers", "1");
-
-    const docSnapActive = await getDoc(docRefActive);
-    const username = docSnapActive.get("username");
+    const username = await UserApi.getUserName();
 
     const docRef = doc(db, "users", username);
     const docSnap = await getDoc(docRef);
 
-    if (docSnapActive.exists() && docSnap.exists()) {
+    if (docSnap.exists()) {
       alert("Profile picture changed.");
       await updateDoc(docRef, { picture: pictureLink });
     } else {

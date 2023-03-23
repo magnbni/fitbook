@@ -1,16 +1,15 @@
-import { addDoc, collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 
-import {  ExcersiseDto, SessionDto} from "../../types/workouts"
+import { ExcersiseDto, SessionDto} from "../../types/workouts"
+import { UserApi } from "./UserApi";
 
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday" ,"Friday", "Saturday", "Sunday"];
 
 
 export const SessionApi = {
-
-  
   getAllSessions: async function (username: string): Promise<Record<string, SessionDto>> {
     const sessions:  Record<string, SessionDto> = {}
     const userDocRef = doc(db, "users", username);
@@ -39,6 +38,7 @@ export const SessionApi = {
             const excersise = {
               name: excersiseData.name,
               reps: excersiseData.reps,
+              sets: excersiseData.sets,
             }
 
             session.excersise[excersiseDoc.id] = excersise
@@ -83,7 +83,7 @@ export const SessionApi = {
     
   },
 
-  addExcersise: async function(username: string, session: string, name: string , reps: string) { 
+  addExcersise: async function(username: string, session: string, name: string , reps: string, sets: string) { 
 
     const userDocRef = doc(db, "users", username);
     const userDocSnap = await getDoc(userDocRef);
@@ -91,6 +91,7 @@ export const SessionApi = {
     const ovelse: ExcersiseDto= {
       name: name,
       reps: reps,
+      sets: sets,
     }
 
     if (userDocSnap.exists()) {
@@ -100,7 +101,31 @@ export const SessionApi = {
     
       return newExcersise.id
     }
-  }
+  },
+
+  deleteSession: async function(username: string, sessionID:string) {
 
 
+    const userDocRef = doc(db, "users", username);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const sessionsDocRef = await deleteDoc(doc(userDocRef, "sessions", sessionID))
+    }
+
+  },
+
+  handleShareSession: async function (session: SessionDto) {
+    alert("Økten er delt!")
+    console.log("Test")
+    const username = await UserApi.getUserName();
+    const userDocRef = doc(db, "users", username);
+    const postText = {
+        "name": session.name,
+        "exercises": session.excersise,
+        "timestamp": serverTimestamp(),
+    };
+    const subcollectionRef = collection(userDocRef, "workoutPosts");
+    addDoc(subcollectionRef, postText)
+    }
 };

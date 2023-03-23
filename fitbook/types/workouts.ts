@@ -4,6 +4,7 @@ import { DocumentData, Timestamp } from "firebase/firestore";
 export type ExcersiseDto = {
     name: string,
     reps: string,
+    sets: string
 }
 
 
@@ -17,7 +18,9 @@ export type SessionDto = {
 
 
 export type WeekDto = {
-    [key: string]: {start: string, end: string, sessionID: string}[];
+    [key: string]: {
+      name: string;start: string, end: string, sessionID: string
+}[];
    
 }
 

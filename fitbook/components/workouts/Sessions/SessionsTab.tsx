@@ -1,5 +1,5 @@
 import { DocumentData, DocumentReference } from "firebase/firestore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ExcersiseDto, SessionDto } from "../../../types/workouts";
 import { SessionApi } from "../../../utils/api/SessionApi";
 import SessionChange from "./SessionChange";
@@ -37,6 +37,28 @@ function SessionsTab({ sessions }: Props) {
     setNewName(event.target.value);
   };
 
+  const refresh = () => {
+    const results: Record<string, SessionDto> = {};
+
+    Object.keys(sessions).forEach((key) => {
+      const session = sessions[key];
+      if (query === "") {
+        results[key] = session;
+      } else if (session.name.toLowerCase().includes(query.toLowerCase())) {
+        results[key] = session;
+      }
+    });
+
+    setQueryList(results);
+  };
+
+  const handleDeleteSession = (id: string) => {
+    console.log("Deletes" + sessions[id].name);
+    delete sessions[id];
+    SessionApi.deleteSession("Endre", id);
+    refresh();
+  };
+
   const handleCreateSession = () => {
     console.log("creating session");
 
@@ -50,17 +72,7 @@ function SessionsTab({ sessions }: Props) {
         };
 
         sessions[res[0]] = emptySession;
-
-        const results: Record<string, SessionDto> = {};
-
-        Object.keys(sessions).forEach((key) => {
-          const session = sessions[key];
-          results[key] = session;
-        });
-
-        setQueryList(results);
-        setID(res[0]);
-        setOpen(true);
+        refresh();
       } else {
         console.log("Failed to create new Session");
       }
@@ -102,11 +114,12 @@ function SessionsTab({ sessions }: Props) {
         >
           {Object.keys(queryList).map((key) => (
             <SessionsCard
+              deleteSession={handleDeleteSession}
               id={key}
               setOpen={setOpen}
               setID={setID}
               key={key}
-              name={queryList[key].name}
+              sessions={sessions}
               img={"/session.jpg"}
             />
           ))}

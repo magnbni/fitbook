@@ -128,7 +128,7 @@ export const WorkoutApi = {
     console.log(username," - ", workoutID)
     const userDocRef = doc(db, "users", username);
     const userDocSnap = await getDoc(userDocRef);
-
+    
     if (userDocSnap.exists()) {
 
       const workoutDocRef = doc(userDocRef, "workouts", workoutID )
@@ -138,7 +138,7 @@ export const WorkoutApi = {
     
   },
 
-  addSessionToWorkout:  async function(username: string, workoutID: string, sesssionID: string, weekID: string, day: string , start: string, end: string) { 
+  addSessionToWorkout:  async function(username: string, workoutID: string, sessionID: string, weekID: string, day: string , start: string, end: string) { 
     const userDocRef = doc(db, "users", username);
     const userDocSnap = await getDoc(userDocRef);
     if (userDocSnap.exists()) {
@@ -149,7 +149,7 @@ export const WorkoutApi = {
       if (weekDocSnap.exists()) {
         const weekData = weekDocSnap.data();
         const dayArray = weekData[day] || []; 
-        const updatedDayArray = [...dayArray, {start, end, sesssionID}]; 
+        const updatedDayArray = [...dayArray, {start, end, sessionID}]; 
         await updateDoc(weekDocRef, { [day]: updatedDayArray });
       }
     }
