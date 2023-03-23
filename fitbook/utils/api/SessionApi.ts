@@ -2,7 +2,7 @@ import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, serverTimestamp, s
 import { db } from "../../firebase";
 
 
-import {  ExcersiseDto, SessionDto} from "../../types/workouts"
+import { ExcersiseDto, SessionDto} from "../../types/workouts"
 import { UserApi } from "./UserApi";
 
 
@@ -10,8 +10,6 @@ const days = ["Monday", "Tuesday", "Wednesday", "Thursday" ,"Friday", "Saturday"
 
 
 export const SessionApi = {
-
-  
   getAllSessions: async function (username: string): Promise<Record<string, SessionDto>> {
     const sessions:  Record<string, SessionDto> = {}
     const userDocRef = doc(db, "users", username);
@@ -117,7 +115,7 @@ export const SessionApi = {
 
   },
 
-  handleShareSession: async function (id: String) {
+  handleShareSession: async function (session: SessionDto) {
     alert("Økten er delt!")
     console.log("Test")
     const username = await UserApi.getUserName();

@@ -156,13 +156,17 @@ function MainFeed() {
     workoutPosts = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       const exercisesArray: Exercise[] = [];
-      console.log(typeof data.exercises);
-      data.exercises.forEach((element: Exercise) => {
-        exercisesArray.push(
-          new Exercise(element.name, element.reps, element.sets)
-        );
-      });
-
+      if (data.exercises) {
+        Object.keys(data.exercises).forEach((key: string) => {
+          exercisesArray.push(
+            new Exercise(
+              data.exercises[key].name,
+              data.exercises[key].reps,
+              data.exercises[key].sets
+            )
+          );
+        });
+      }
       return new WorkoutPost(
         doc.id,
         "workoutPost",
