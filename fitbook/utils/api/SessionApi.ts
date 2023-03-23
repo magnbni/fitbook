@@ -117,14 +117,14 @@ export const SessionApi = {
 
   },
 
-  handleShareSession: async function (id: String) {
+  handleShareSession: async function (session: SessionDto) {
     console.log("Test")
     const username = await UserApi.getUserName();
     const userDocRef = doc(db, "users", username);
     const postText = {
-        "username": username,
-        "sessionID": id,
-        timestamp: serverTimestamp(),
+        "name": session.name,
+        "exercises": session.excersise,
+        "timestamp": serverTimestamp(),
     };
     const subcollectionRef = collection(userDocRef, "workoutPosts");
     addDoc(subcollectionRef, postText)

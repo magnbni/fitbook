@@ -43,7 +43,7 @@ function SessionsCard({
       </div>
       <div
         onClick={() => {
-          SessionApi.handleShareSession(id);
+          SessionApi.handleShareSession(sessions[id]);
         }}
         className="absolute z-40 px-2 text-sm rounded-full cursor-pointer bottom-1 right-2 h-fit bg-primary text-white"
       >

@@ -1,15 +1,17 @@
 import { Timestamp } from "firebase/firestore";
 import React from "react";
 import "./FitbookPost.css"; // Importerer stilen for komponenten
-import {Workout} from "./MainFeed";
+import { Exercise } from "./MainFeed";
 
 type Props = {
   username: string;
   profilepic: string;
-  workout: Workout;
+  exercises: Exercise[];
 };
 
-const FitbookPost = ({ username, profilepic, workout }: Props) => {
+const FitbookPost = ({ username, profilepic, exercises }: Props) => {
+  console.log("this is a workout post");
+  console.log(exercises);
   return (
     <div className="fitbook-post">
       <div className="post-header">
@@ -73,7 +75,7 @@ const FitbookPost = ({ username, profilepic, workout }: Props) => {
         </div>
         <hr />
         <p>
-          <b>{username}</b> {workout.name}
+          <b>{username}</b> {"exercises"}
         </p>
       </div>
     </div>

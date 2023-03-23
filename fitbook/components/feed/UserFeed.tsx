@@ -18,33 +18,14 @@ import FitbookPostWithImage from "./FitbookPostWithImage";
 import FitbookPostWorkout from "./FitbookPostWorkout";
 import Post from "./Post";
 
-export class Workout {
-  name: string;
-  timestampStart: Timestamp;
-  timestampEnd: Timestamp;
-  exercises: Array<Exercise>;
-
-  constructor(
-    name: string,
-    timestampStart: Timestamp,
-    timestampEnd: Timestamp,
-    exercises: Array<Exercise>
-  ) {
-    this.name = name;
-    this.timestampStart = timestampStart;
-    this.timestampEnd = timestampEnd;
-    this.exercises = exercises;
-  }
-}
-
 export class Exercise {
   name: string;
-  repetition: number;
+  reps: number;
   sets: number;
 
-  constructor(name: string, repetition: number, sets: number) {
+  constructor(name: string, reps: number, sets: number) {
     this.name = name;
-    this.repetition = repetition;
+    this.reps = reps;
     this.sets = sets;
   }
 }
@@ -83,7 +64,7 @@ function MainFeed() {
     type: string;
     username: string;
     profilepic: string;
-    workout: Workout;
+    exercises: Exercise[];
     timestamp: Timestamp;
 
     constructor(
@@ -91,14 +72,14 @@ function MainFeed() {
       type: string,
       username: string,
       profilepic: string,
-      workout: Workout,
+      exercises: Exercise[],
       timestamp: Timestamp
     ) {
       this.id = id;
       this.type = type;
       this.username = username;
       this.profilepic = profilepic;
-      this.workout = workout;
+      this.exercises = exercises;
       this.timestamp = timestamp;
     }
   }
@@ -165,38 +146,31 @@ function MainFeed() {
   };
 
   const findWorkoutPosts = async (username: string) => {
+    workoutPosts = [];
     const docRef = doc(db, "users", username);
     const docSnap = await getDoc(docRef);
     const postRef = collection(db, "users", username, "workoutPosts");
-
     const postQuery = query(postRef);
 
     const querySnapshot = await getDocs(postQuery);
-    const postedSession = querySnapshot.docs.map((doc) => {
-      return doc.data().id;
-    });
-    let workoutPosts = querySnapshot.docs.map(async (doc) => {
+    workoutPosts = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      if (data.id in postedSession) {
-        const exercisesRef = collection(postRef, doc.id, "Exercises");
-        const exercisesSnapshot = await getDocs(exercisesRef);
-        const exercises = exercisesSnapshot.docs.map((exerciseDoc) => {
-          return new Exercise(data.name, data.repetition, data.sets);
-        });
-        return new WorkoutPost(
-          doc.id,
-          "workoutPost",
-          username,
-          docSnap.get("picture"),
-          new Workout(
-            data.name,
-            data.timestampStart,
-            data.timestampEnd,
-            exercises
-          ),
-          data.timestamp
+      const exercisesArray: Exercise[] = [];
+      console.log(typeof data.exercises);
+      data.exercises.forEach((element: Exercise) => {
+        exercisesArray.push(
+          new Exercise(element.name, element.reps, element.sets)
         );
-      }
+      });
+
+      return new WorkoutPost(
+        doc.id,
+        "workoutPost",
+        username,
+        docSnap.get("picture"),
+        exercisesArray,
+        data.timestamp
+      );
     });
   };
 
@@ -228,7 +202,7 @@ function MainFeed() {
                 key={post.id}
                 username={post.username}
                 profilepic={post.profilepic}
-                workout={(post as WorkoutPost).workout}
+                exercises={(post as WorkoutPost).exercises}
               />
             );
           }
