@@ -32,7 +32,7 @@ const Workouts: NextPage = () => {
             SessionApi.createSession("Endre", "Totoro mage");
           }}
         >
-          HELLLOOOOOOOO BUTTON
+          
         </button>
         <WorkoutsPage
           tab={tab}

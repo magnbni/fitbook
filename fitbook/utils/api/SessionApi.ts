@@ -130,6 +130,7 @@ export const SessionApi = {
       const subcollectionRef = collection(userDocRef, "workoutPosts");
       addDoc(subcollectionRef, postText)
     };
+    alert("Økten er delt!")
   }
 
 
