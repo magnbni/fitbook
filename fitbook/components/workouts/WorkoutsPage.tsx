@@ -68,12 +68,7 @@ function WorkoutsPage({ setID, setOpen, setTab, tab }: Props) {
             Sessions
           </button>
         </div>
-        {tab === 0 &&
-          (loading ? (
-            <p>Loading...</p>
-          ) : (
-            <WorkoutsTab workouts={workouts} sessions={sessions} />
-          ))}
+        {tab === 0 && <WorkoutsTab workouts={workouts} sessions={sessions} />}
 
         {tab === 1 && <SessionsTab sessions={sessions} />}
       </div>
