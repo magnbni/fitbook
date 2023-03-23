@@ -119,11 +119,11 @@ export const SessionApi = {
 
   handleShareSession: async function (id: String) {
     console.log("Test")
-    const postText = async () => {
-      const username = await UserApi.getUserName();
-      const userDocRef = doc(db, "users", username);
-      const docData = {
-        sessionID: id,
+    const username = await UserApi.getUserName();
+    const userDocRef = doc(db, "users", username);
+    const postText = {
+        "username": username,
+        "sessionID": id,
         timestamp: serverTimestamp(),
       };
   
