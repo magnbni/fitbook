@@ -64,6 +64,7 @@ function MainFeed() {
     type: string;
     username: string;
     profilepic: string;
+    name: string;
     exercises: Array<Exercise>;
     timestamp: Timestamp;
 
@@ -72,6 +73,7 @@ function MainFeed() {
       type: string,
       username: string,
       profilepic: string,
+      name: string,
       exercises: Exercise[],
       timestamp: Timestamp
     ) {
@@ -79,6 +81,7 @@ function MainFeed() {
       this.type = type;
       this.username = username;
       this.profilepic = profilepic;
+      this.name = name;
       this.exercises = exercises;
       this.timestamp = timestamp;
     }
@@ -195,6 +198,7 @@ function MainFeed() {
         "workoutPost",
         username,
         docSnap.get("picture"),
+        data.name,
         exercisesArray,
         data.timestamp
       );
@@ -237,6 +241,7 @@ function MainFeed() {
                 key={post.id}
                 username={post.username}
                 profilepic={post.profilepic}
+                name={(post as WorkoutPost).name}
                 exercises={(post as WorkoutPost).exercises}
               />
             );
