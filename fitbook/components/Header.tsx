@@ -5,6 +5,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
+import { UserApi } from "../utils/api/UserApi";
 import Logout from "./Logout";
 
 function Header() {
@@ -26,22 +27,18 @@ function Header() {
     if (docSnap.exists() && docSnap.exists()) {
       const pictureInDatabase = docSnap.get("picture");
       setImgsrc(pictureInDatabase);
-      console.log(pictureInDatabase);
     } else {
       signOut();
     }
   };
 
   const username = async () => {
-    const docRefActive = doc(db, "activeUsers", "1");
-
-    const docSnapActive = await getDoc(docRefActive);
-    const username = docSnapActive.get("username");
+    const username = await UserApi.getUserName();
 
     const docRef = doc(db, "users", username);
     const docSnap = await getDoc(docRef);
 
-    if (docSnapActive.exists() && docSnap.exists()) {
+    if (docSnap.exists()) {
       const username = docSnap.get("username");
       setUsernamesrc(username);
     } else {
@@ -49,9 +46,20 @@ function Header() {
     }
   };
 
+  const handleClick = () => {
+    window.location.href = "/";
+    setTimeout(() => {
+      window.
+      window.location.reload();
+    }, 1000);
+  };
+
+  generateImage();
+  username();
+
   return (
     <header className="fixed top-0 z-40 flex items-center justify-between w-full p-4 shadow-xl h-14 bg-primary">
-      <Link className="items-center" href={"/"}>
+      <Link className="items-center" href={"/"} onClick={handleClick}>
         <p className="text-2xl font-black tracking-wider text-white drop-shadow-md">
           fitbook
         </p>

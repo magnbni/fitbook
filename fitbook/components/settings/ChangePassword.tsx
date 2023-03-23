@@ -3,6 +3,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { signOut } from "next-auth/react";
 import React, { useState, useRef } from "react";
 import { db } from "../../firebase";
+import { UserApi } from "../../utils/api/UserApi";
 
 const ChangePassword = () => {
   const [clicked, setClicked] = useState(false);
@@ -10,14 +11,11 @@ const ChangePassword = () => {
   const changePassword = async () => {
     setClicked(!clicked);
     let password = inputRef.current.value;
-    console.log(password);
     const docData = { password: password };
-    const docRefActive = doc(db, "activeUsers", "1");
-    const docSnapActive = await getDoc(docRefActive);
-    const username = docSnapActive.get("username");
+    const username = await UserApi.getUserName();
     const docRef = doc(db, "users", username);
     const docSnap = await getDoc(docRef);
-    if (docSnapActive.exists() && docSnap.exists()) {
+    if (docSnap.exists()) {
       alert("Password changed.");
       await updateDoc(docRef, { password: password });
     } else {

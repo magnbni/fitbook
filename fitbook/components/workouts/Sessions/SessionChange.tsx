@@ -15,6 +15,7 @@ type Props = {
 function SessionChange({ session, sessions, setOpen }: Props) {
   const [inputName, setInputName] = useState<string>("");
   const [inputReps, setInputReps] = useState<string>("");
+  const [inputSets, setInputSets] = useState<string>("");
 
   const [excersiseArray, setExcersises] = useState<
     Record<string, ExcersiseDto>
@@ -25,17 +26,19 @@ function SessionChange({ session, sessions, setOpen }: Props) {
 
     setInputName("");
     setInputReps("");
+    setInputSets("");
 
     SessionApi.addExcersise(
       "Endre",
       session.sessionID,
       inputName,
-      inputReps
+      inputReps,
+      inputSets
     ).then((res) => {
       if (res != null) {
         const excersiseArray = {
           ...session.excersise,
-          [res]: { name: inputName, reps: inputReps },
+          [res]: { name: inputName, reps: inputReps, sets: inputSets },
         };
         session.excersise = excersiseArray;
         setExcersises(excersiseArray);
@@ -86,6 +89,13 @@ function SessionChange({ session, sessions, setOpen }: Props) {
                 type="number"
                 placeholder="Reps"
                 onChange={(event) => setInputReps(event.target.value)}
+              />
+              <input
+                value={inputSets}
+                className="p-1 my-1 border-2"
+                type="number"
+                placeholder="Sets"
+                onChange={(event) => setInputSets(event.target.value)}
               />
               <button
                 className="p-2 text-white bg-primary"

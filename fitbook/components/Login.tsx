@@ -76,7 +76,6 @@ const signIn2 = async () => {
 
     if (docSnap.exists()) {
       let passwordInDatabase = docSnap.get("password");
-      console.log(passwordInDatabase);
       if (passwordInDatabase == password) {
         await setDoc(doc(db, "activeUsers", "1"), docData2);
         signIn("google");
