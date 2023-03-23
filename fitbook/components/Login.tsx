@@ -5,6 +5,8 @@ import { db, firebase } from "../firebase";
 import { collection, doc, setDoc, addDoc, getDoc } from "firebase/firestore";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { User } from "../types/user";
+import { WorkoutDto } from "../types/workouts";
 
 function Login() {
   let usernameValue: String;
@@ -15,19 +17,19 @@ function Login() {
 
   return (
     <>
-      <div className="flex flex-col items-center text-center justify-center w-screen h-screen text-white align-middle bg-primary">
+      <div className="flex flex-col items-center justify-center w-screen h-screen text-center text-white align-middle bg-primary">
         <p className="text-4xl ">Welcome to</p>
-        <p className="text-9xl mb-10">fitbook</p>
+        <p className="mb-10 text-9xl">fitbook</p>
         <input
           value={name}
           type="text"
-          className="text-black mt-6"
+          className="mt-6 text-black"
           placeholder="Username"
           id="usernameID"
           onChange={(e) => setName(e.target.value)}
         ></input>
         <input
-          className="text-black mb-3 mt-1"
+          className="mt-1 mb-3 text-black"
           value={word}
           id="passwordID"
           placeholder="Password"
@@ -35,20 +37,20 @@ function Login() {
           onChange={(e) => setWord(e.target.value)}
         ></input>
         <button
-          className="flex items-center justify-between w-80 px-4 m-1 bg-white border-2 text-center content-center"
+          className="flex items-center content-center justify-between px-4 m-1 text-center bg-white border-2 w-80"
           data-onsuccess="onSignIn"
           onClick={() => signIn2()}
         >
-          <p className="pr-5 font-bold text-center w-full text-primary">
+          <p className="w-full pr-5 font-bold text-center text-primary">
             Sign in here
           </p>
         </button>
         <button
-          className="flex items-center justify-between px-4 m-1 bg-white border-2 w-80 text-center"
+          className="flex items-center justify-between px-4 m-1 text-center bg-white border-2 w-80"
           data-onsuccess="onSignIn"
           onClick={() => signUp()}
         >
-          <p className="pr-5 font-bold text-primary w-full text-center lm-5">
+          <p className="w-full pr-5 font-bold text-center text-primary lm-5">
             Sign up here
           </p>
         </button>
@@ -96,9 +98,9 @@ const signUp = async () => {
   const docData = {
     username: username,
     password: password,
-    friends: [""],
-    picture: "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png"
+    img: "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png",
   };
+
   const docData2 = {
     username: username,
   };

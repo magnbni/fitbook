@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
-import SessionDisplay from "./SessionDisplay";
+import SessionDisplay from "./Workouts/SessionDisplay";
 
 type Props = {};
 
