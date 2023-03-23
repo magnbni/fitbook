@@ -118,6 +118,7 @@ export const SessionApi = {
   },
 
   handleShareSession: async function (id: String) {
+    alert("Økten er delt!")
     console.log("Test")
     const username = await UserApi.getUserName();
     const userDocRef = doc(db, "users", username);
@@ -125,13 +126,8 @@ export const SessionApi = {
         "username": username,
         "sessionID": id,
         timestamp: serverTimestamp(),
-      };
-  
-      const subcollectionRef = collection(userDocRef, "workoutPosts");
-      addDoc(subcollectionRef, postText)
     };
-    alert("Økten er delt!")
-  }
-
-
+    const subcollectionRef = collection(userDocRef, "workoutPosts");
+    addDoc(subcollectionRef, postText)
+    }
 };
