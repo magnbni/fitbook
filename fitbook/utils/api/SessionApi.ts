@@ -117,7 +117,8 @@ export const SessionApi = {
 
   },
 
-  handleShareSession: async function (session: SessionDto) {
+  handleShareSession: async function (id: String) {
+    alert("Økten er delt!")
     console.log("Test")
     const username = await UserApi.getUserName();
     const userDocRef = doc(db, "users", username);
