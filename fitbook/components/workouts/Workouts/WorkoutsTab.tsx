@@ -106,7 +106,7 @@ function WorkoutsTab({ workouts, sessions }: Props) {
         </fieldset>
         <div>
           <input
-            placeholder="New session name"
+            placeholder="New workout name"
             onChange={handleNewNameChange}
             className="p-2 mx-2 border-2 rounded border-primary "
             type="text"

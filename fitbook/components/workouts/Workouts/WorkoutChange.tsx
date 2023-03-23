@@ -84,7 +84,7 @@ function WorkoutChange({ workout, sessions, setOpen }: Props) {
                   key={index}
                   start={session.start}
                   end={session.end}
-                  name={sessions[session.sessionID].name}
+                  name={session.name}
                   session={sessions[session.sessionID]}
                 />
               );
