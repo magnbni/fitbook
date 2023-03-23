@@ -21,6 +21,8 @@ const Friend = ({ name, userName, img, userID }: User) => {
     const docSnap = await getDoc(activeUserRef);
     await deleteDoc(doc(db,"users",docSnap.get("username"), "friends", userName)).then(()=>{
       alert(`@${userName} is no longer your friend.`);
+      window.location.reload();
+
 
     }).catch((error)=>{
       alert(error.message);

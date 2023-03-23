@@ -47,7 +47,6 @@ const Friends: NextPage = () => {
     })
     console.log(friends)
 
-    //legg inn where filtrering på denne under. () gjort??
     const FriendsOfActiveUserQuery = query(AllUsersRef, where("username", "in", friends))
 
     const resultofQuery = await getDocs(FriendsOfActiveUserQuery).then((snapshot) => {
